@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> memory</title>
+<title>memory</title>
 
 <style>
 body{
@@ -14,61 +14,366 @@ body{
   overflow-x:hidden;
 }
 
-/* RAIN CANVAS */
 #matrix{
   position:fixed;
   inset:0;
   z-index:-5;
-  opacity:0.3; 
+  opacity:0.3;
 }
 
-/* --- ANIMASI KARTUN CSS (Cyber-Bot) --- */
-.footer-animation {
-  width: 100%;
-  height: 120px;
-  position: relative;
-  margin-top: 50px;
-  border-top: 1px dashed rgba(0, 255, 231, 0.2);
+/* GATE */
+#gate{
+  position:fixed;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:black;
+  z-index:9999;
+  transition:1s;
 }
 
-.bot {
-  position: absolute;
-  bottom: 20px;
-  width: 50px;
-  height: 50px;
-  animation: walkBot 15s linear infinite;
+#gate.hide{
+  opacity:0;
+  transform:scale(1.2);
+  filter:blur(10px);
 }
 
-/* Badan Bot */
-.bot-body {
-  width: 40px;
-  height: 35px;
-  background: #00ffe7;
-  border-radius: 8px;
-  position: relative;
-  box-shadow: 0 0 15px #00ffe7;
+.profile{
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  background:url("profil.jpg") center/cover;
+  border:2px solid #00ffe7;
+  box-shadow:0 0 20px #00ffe7;
 }
 
-/* Mata berkedip */
-.bot-body::before, .bot-body::after {
-  content: '';
-  position: absolute;
-  top: 10px;
-  width: 6px;
-  height: 6px;
-  background: #050510;
-  border-radius: 50%;
-  animation: blink 3s infinite;
+.enter{
+  margin-top:20px;
+  padding:10px 18px;
+  border:1px solid #00ffe7;
+  background:transparent;
+  color:#00ffe7;
+  cursor:pointer;
 }
-.bot-body::before { left: 8px; }
-.bot-body::after { right: 8px; }
 
-/* Kaki bergerak */
-.bot-legs {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 2px;
-  width: 40px;
+main{display:none;}
+
+/* ================= SCENE ASLI (TIDAK DIUBAH) ================= */
+
+.scene{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:40px;
+  opacity:0;
+  transform:translateY(40px);
+  transition:1s;
+}
+
+.scene.show{opacity:1;transform:translateY(0);}
+
+.scene img{
+  width:min(320px,90vw);
+  border-radius:15px;
+  border:1px solid #00ffe7;
+  margin-bottom:20px;
+}
+
+.typing{
+  max-width:700px;
+  line-height:1.8;
+  white-space:pre-wrap;
+}
+
+/* BARCODE */
+.barcode{
+  margin:40px auto;
+  width:min(320px,80vw);
+}
+
+.barcode img{
+  width:100%;
+  border-radius:12px;
+  border:1px solid #00ffe7;
+  box-shadow:0 0 15px rgba(0,255,231,0.3);
+}
+
+/* BOT */
+.footer-animation{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:120px;
+  border-top:1px dashed rgba(0,255,231,0.2);
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.bot{
+  position:absolute;
+  bottom:18px;
+  width:60px;
+  height:50px;
+  pointer-events:auto;
+  cursor:pointer;
+}
+
+.bot-body{
+  width:45px;
+  height:30px;
+  border-radius:10px;
+  box-shadow:0 0 12px #00ffe7;
+  position:relative;
+}
+
+.eyes{
+  position:absolute;
+  top:7px;
+  width:100%;
+  display:flex;
+  justify-content:space-around;
+}
+
+.eye{
+  width:6px;
+  height:6px;
+  background:#050510;
+  border-radius:50%;
+}
+
+.legs{
+  display:flex;
+  justify-content:space-around;
+  width:45px;
+}
+
+.leg{
+  width:8px;
+  height:12px;
+  background:#00ffe7;
+}
+
+/* !! */
+.bad{
+  position:absolute;
+  top:-18px;
+  left:50%;
+  transform:translateX(-50%);
+  color:red;
+  font-weight:bold;
+  font-size:18px;
+  animation:pop .4s ease;
+}
+
+@keyframes pop{
+  from{opacity:0;transform:translate(-50%,10px);}
+  to{opacity:1;transform:translate(-50%,0);}
+}
+
+/* MATRIX */
+canvas{
+  position:fixed;
+  inset:0;
+  z-index:-10;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<!-- GATE -->
+<div id="gate">
+  <div class="profile"></div>
+  <h2>GRADUATION</h2>
+  <button class="enter" onclick="enter()">unlock memory</button>
+</div>
+
+<main>
+
+<!-- ================= SCENE ASLI FULL ================= -->
+
+<div class="scene">
+  <h1>happy graduation 🎓</h1>
+  <div class="typing" data-text="Dina Nur Aini...
+jangan nangis ya.
+aku tau ini harusnya jadi hari paling bahagia buat kamu, tapi aku juga tau kadang bahagia ga selalu sesederhana itu.
+aku sedih... karena aku ga bisa liat langsung hari wisudamu, ga bisa ada di sana, ga bisa nemenin kamu di momen yang harusnya penting banget itu.
+aku bahkan ga bisa ngasih kamu hadiah, ga bisa kasih sesuatu yang bisa kamu pegang.
+dan jujur... aku juga malu sama diriku sendiri.
+tapi walaupun aku ga ada di sana... aku tetap bangga sama kamu, bener-bener bangga."></div>
+</div>
+
+<div class="scene">
+  <div class="typing" data-text="aku cuma mau kamu tau, aku bangga sama kamu. bangga banget sampai kadang aku sendiri bingung gimana cara jelasin perasaan itu.
+aku liat kamu sampai di titik ini dan aku tau itu bukan perjalanan yang gampang. ada capek, ada jatuh, ada hari dimana kamu mungkin pengen nyerah, tapi kamu tetap jalan.
+dan itu yang bikin aku kagum sama kamu.
+jujur aku pengen banget ada di sana, liat kamu secara langsung, liat kamu senyum di hari itu.
+tapi kenyataannya aku cuma bisa ada di sini... dari jauh.
+aku cuma seseorang yang ga bisa hadir, cuma bisa lihat kamu tanpa benar-benar jadi bagian dari momen itu."></div>
+</div>
+
+<div class="scene">
+  <div class="typing" data-text="maaf ya...
+aku cuma bisa ngasih ini.
+bukan hadiah yang nyata, bukan sesuatu yang bisa kamu simpan di tangan kamu.
+cuma kata-kata sederhana dari seseorang yang bahkan ga bisa ada di hari penting kamu.
+aku tau ini ga sebanding sama apa yang harusnya kamu dapet.
+tapi ini yang paling tulus yang aku punya."></div>
+</div>
+
+<div class="scene">
+  <img src="foto.jpg">
+  <div class="typing" data-text="walaupun cuma kayak gini... perasaan aku ke kamu itu beneran,
+kamu akan selalu punya aku, oke? Aku mungkin bukan apa-apa, tapi aku akan selalu berada di sisimu apa pun yang terjadi."></div>
+</div>
+
+<div class="scene">
+  <img src="foto2.jpg">
+  <div class="typing" data-text="aku suka cara kamu bertahan, aku suka cara kamu kuat, aku suka kamu... apa adanya."></div>
+</div>
+
+<div class="scene">
+  <img src="foto3.jpg">
+  <div class="typing" data-text="mungkin aku bukan siapa-siapa buat kamu, mungkin aku ga pernah jadi bagian penting di hidup kamu.
+tapi buat aku, kamu itu selalu punya tempat yang ga pernah bisa diganti sama siapa pun."></div>
+</div>
+
+<div class="scene">
+  <div class="typing" data-text="kalau suatu hari nanti kamu ngerasa capek, ngerasa sendiri, atau dunia terasa terlalu berat buat kamu jalanin...
+aku harap kamu inget ini.
+pernah ada seseorang yang diam-diam selalu bangga sama kamu, selalu doain kamu, dan selalu berharap kamu bahagia walaupun bukan sama dia.
+mungkin aku ga pernah jadi yang kamu pilih, mungkin aku cuma lewat sebentar di hidup kamu.
+tapi perasaan aku ke kamu itu ga pernah sebentar.
+dan kalau suatu hari kamu lupa seberapa berharganya kamu...
+tolong inget ini lagi.
+karena pernah ada seseorang yang benar-benar tulus sayang sama kamu, tanpa minta apa pun sebagai balasan.
+itu aku."></div>
+</div>
+
+<!-- BARCODE -->
+<div class="barcode">
+  <img src="IMG_20260503_181657.png">
+</div>
+
+<!-- BOT (UNIQUE SPEED + ARAH BERBEDA) -->
+<div class="footer-animation">
+
+  <div class="bot" onclick="angry(this)" style="animation:move1 6s linear infinite;">
+    <div class="bot-body" style="background:#00ffe7">
+      <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+    </div>
+    <div class="legs"><div class="leg"></div><div class="leg"></div></div>
+  </div>
+
+  <div class="bot" onclick="angry(this)" style="animation:move2 8s linear infinite;">
+    <div class="bot-body" style="background:#ff4d6d">
+      <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+    </div>
+    <div class="legs"><div class="leg"></div><div class="leg"></div></div>
+  </div>
+
+  <div class="bot" onclick="angry(this)" style="animation:move3 10s linear infinite;">
+    <div class="bot-body" style="background:#ffd60a">
+      <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+    </div>
+    <div class="legs"><div class="leg"></div><div class="leg"></div></div>
+  </div>
+
+</div>
+
+</main>
+
+<script>
+
+function enter(){
+  document.getElementById("gate").classList.add("hide");
+  setTimeout(()=>{
+    document.getElementById("gate").style.display="none";
+    document.querySelector("main").style.display="block";
+    observe();
+  },900);
+}
+
+/* SCENE */
+function observe(){
+  document.querySelectorAll(".scene").forEach(s=>{
+    new IntersectionObserver(e=>{
+      if(e[0].isIntersecting){
+        s.classList.add("show");
+        type(s.querySelector(".typing"));
+      }
+    }).observe(s);
+  });
+}
+
+function type(el){
+  if(!el||el.classList.contains("done"))return;
+  let t=el.dataset.text,i=0;
+  el.textContent="";
+  el.classList.add("done");
+
+  (function run(){
+    if(i<t.length){
+      el.textContent+=t[i++];
+      setTimeout(run,25);
+    }
+  })();
+}
+
+/* !! */
+function angry(bot){
+  let b=document.createElement("div");
+  b.className="bad";
+  b.innerText="!!";
+  bot.appendChild(b);
+  setTimeout(()=>b.remove(),700);
+}
+
+/* BOT UNIQUE MOVEMENT */
+const style=document.createElement("style");
+style.innerHTML=`
+@keyframes move1{0%{transform:translateX(-120px);}100%{transform:translateX(120vw);}}
+@keyframes move2{0%{transform:translateX(-200px);}100%{transform:translateX(120vw);}}
+@keyframes move3{0%{transform:translateX(-300px);}100%{transform:translateX(120vw);}}
+`;
+document.head.appendChild(style);
+
+/* MATRIX */
+const c=document.getElementById("matrix");
+const x=c.getContext("2d");
+c.width=innerWidth;
+c.height=innerHeight;
+
+let r=[];
+for(let i=0;i<120;i++){
+  r.push({x:Math.random()*c.width,y:Math.random()*c.height,s:3+Math.random()*5});
+}
+
+(function draw(){
+  x.clearRect(0,0,c.width,c.height);
+  x.strokeStyle="rgba(0,255,231,.4)";
+  r.forEach(v=>{
+    x.beginPath();
+    x.moveTo(v.x,v.y);
+    x.lineTo(v.x,v.y+10);
+    x.stroke();
+    v.y+=v.s;
+    if(v.y>c.height)v.y=0;
+  });
+  requestAnimationFrame(draw);
+})();
+</script>
+
+</body>
+</html>  width: 40px;
 }
 .leg {
   width: 8px;
