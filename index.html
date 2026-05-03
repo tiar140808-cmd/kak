@@ -60,8 +60,7 @@ body{
 
 main{display:none;}
 
-/* ================= SCENE ASLI (TIDAK DIUBAH) ================= */
-
+/* SCENE (JANGAN DIUBAH) */
 .scene{
   min-height:100vh;
   display:flex;
@@ -90,90 +89,28 @@ main{display:none;}
   white-space:pre-wrap;
 }
 
-/* BARCODE */
+/* ================= BARCODE CYBER FIX ================= */
 .barcode{
-  margin:40px auto;
-  width:min(320px,80vw);
+  margin:50px auto;
+  width:min(340px,85vw);
+  display:flex;
+  justify-content:center;
 }
 
 .barcode img{
   width:100%;
-  border-radius:12px;
+  border-radius:14px;
+
+  /* cyber frame */
+  padding:12px;
+  background:rgba(0,0,0,0.6);
   border:1px solid #00ffe7;
-  box-shadow:0 0 15px rgba(0,255,231,0.3);
-}
 
-/* BOT */
-.footer-animation{
-  position:fixed;
-  bottom:0;
-  left:0;
-  width:100%;
-  height:120px;
-  border-top:1px dashed rgba(0,255,231,0.2);
-  overflow:hidden;
-  pointer-events:none;
-}
-
-.bot{
-  position:absolute;
-  bottom:18px;
-  width:60px;
-  height:50px;
-  pointer-events:auto;
-  cursor:pointer;
-}
-
-.bot-body{
-  width:45px;
-  height:30px;
-  border-radius:10px;
-  box-shadow:0 0 12px #00ffe7;
-  position:relative;
-}
-
-.eyes{
-  position:absolute;
-  top:7px;
-  width:100%;
-  display:flex;
-  justify-content:space-around;
-}
-
-.eye{
-  width:6px;
-  height:6px;
-  background:#050510;
-  border-radius:50%;
-}
-
-.legs{
-  display:flex;
-  justify-content:space-around;
-  width:45px;
-}
-
-.leg{
-  width:8px;
-  height:12px;
-  background:#00ffe7;
-}
-
-/* !! */
-.bad{
-  position:absolute;
-  top:-18px;
-  left:50%;
-  transform:translateX(-50%);
-  color:red;
-  font-weight:bold;
-  font-size:18px;
-  animation:pop .4s ease;
-}
-
-@keyframes pop{
-  from{opacity:0;transform:translate(-50%,10px);}
-  to{opacity:1;transform:translate(-50%,0);}
+  /* glow + shadow */
+  box-shadow:
+    0 0 15px rgba(0,255,231,0.5),
+    0 0 40px rgba(0,255,231,0.2),
+    inset 0 0 10px rgba(0,255,231,0.15);
 }
 
 /* MATRIX */
@@ -198,7 +135,7 @@ canvas{
 
 <main>
 
-<!-- ================= SCENE ASLI FULL ================= -->
+<!-- ================= SEMUA SCENE TETAP ================= -->
 
 <div class="scene">
   <h1>happy graduation 🎓</h1>
@@ -263,32 +200,6 @@ itu aku."></div>
   <img src="IMG_20260503_181657.png">
 </div>
 
-<!-- BOT (UNIQUE SPEED + ARAH BERBEDA) -->
-<div class="footer-animation">
-
-  <div class="bot" onclick="angry(this)" style="animation:move1 6s linear infinite;">
-    <div class="bot-body" style="background:#00ffe7">
-      <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
-    </div>
-    <div class="legs"><div class="leg"></div><div class="leg"></div></div>
-  </div>
-
-  <div class="bot" onclick="angry(this)" style="animation:move2 8s linear infinite;">
-    <div class="bot-body" style="background:#ff4d6d">
-      <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
-    </div>
-    <div class="legs"><div class="leg"></div><div class="leg"></div></div>
-  </div>
-
-  <div class="bot" onclick="angry(this)" style="animation:move3 10s linear infinite;">
-    <div class="bot-body" style="background:#ffd60a">
-      <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
-    </div>
-    <div class="legs"><div class="leg"></div><div class="leg"></div></div>
-  </div>
-
-</div>
-
 </main>
 
 <script>
@@ -315,36 +226,18 @@ function observe(){
 }
 
 function type(el){
-  if(!el||el.classList.contains("done"))return;
-  let t=el.dataset.text,i=0;
-  el.textContent="";
+  if(!el || el.classList.contains("done")) return;
+  let t = el.dataset.text, i = 0;
+  el.textContent = "";
   el.classList.add("done");
 
   (function run(){
-    if(i<t.length){
-      el.textContent+=t[i++];
-      setTimeout(run,25);
+    if(i < t.length){
+      el.textContent += t[i++];
+      setTimeout(run, 25);
     }
   })();
 }
-
-/* !! */
-function angry(bot){
-  let b=document.createElement("div");
-  b.className="bad";
-  b.innerText="!!";
-  bot.appendChild(b);
-  setTimeout(()=>b.remove(),700);
-}
-
-/* BOT UNIQUE MOVEMENT */
-const style=document.createElement("style");
-style.innerHTML=`
-@keyframes move1{0%{transform:translateX(-120px);}100%{transform:translateX(120vw);}}
-@keyframes move2{0%{transform:translateX(-200px);}100%{transform:translateX(120vw);}}
-@keyframes move3{0%{transform:translateX(-300px);}100%{transform:translateX(120vw);}}
-`;
-document.head.appendChild(style);
 
 /* MATRIX */
 const c=document.getElementById("matrix");
@@ -370,125 +263,7 @@ for(let i=0;i<120;i++){
   });
   requestAnimationFrame(draw);
 })();
-</script>
 
-</body>
-</html>    <div class="scene">
-  <img src="foto2.jpg">
-  <div class="typing" data-text="aku suka cara kamu bertahan, aku suka cara kamu kuat, aku suka kamu... apa adanya."></div>
-</div>
-
-<div class="scene">
-  <img src="foto3.jpg">
-  <div class="typing" data-text="mungkin aku bukan siapa-siapa buat kamu, mungkin aku ga pernah jadi bagian penting di hidup kamu.
-tapi buat aku, kamu itu selalu punya tempat yang ga pernah bisa diganti sama siapa pun."></div>
-</div>
-
-<!-- ENDING SAD -->
-<div class="scene">
-  <div class="typing" data-text="kalau suatu hari nanti kamu ngerasa capek, ngerasa sendiri, atau dunia terasa terlalu berat buat kamu jalanin...
-aku harap kamu inget ini.
-pernah ada seseorang yang diam-diam selalu bangga sama kamu, selalu doain kamu, dan selalu berharap kamu bahagia walaupun bukan sama dia.
-mungkin aku ga pernah jadi yang kamu pilih, mungkin aku cuma lewat sebentar di hidup kamu.
-tapi perasaan aku ke kamu itu ga pernah sebentar.
-dan kalau suatu hari kamu lupa seberapa berharganya kamu...
-tolong inget ini lagi.
-karena pernah ada seseorang yang benar-benar tulus sayang sama kamu, tanpa minta apa pun sebagai balasan.
-itu aku."></div>
-
-  <!-- KARTUN CSS DI PALING BAWAH -->
-  <div class="footer-animation">
-    <div class="bot">
-      <div class="bot-body"></div>
-      <div class="bot-legs">
-        <div class="leg left"></div>
-        <div class="leg right"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</main>
-
-<script>
-function enter(){
-  const gate = document.getElementById("gate");
-  gate.style.opacity = "0";
-  setTimeout(()=>{
-    gate.style.display="none";
-    document.querySelector("main").style.display="block";
-    observeScenes();
-  },800);
-}
-
-function observeScenes(){
-  const scenes=document.querySelectorAll(".scene");
-  const observer=new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        entry.target.classList.add("show");
-        typeText(entry.target.querySelector(".typing"));
-      }
-    });
-  },{threshold:0.4});
-  scenes.forEach(s=>observer.observe(s));
-}
-
-function typeText(el){
-  if(!el || el.classList.contains("done")) return;
-  let text=el.dataset.text;
-  el.textContent="";
-  el.classList.add("done");
-  let i=0;
-  function typing(){
-    if(i<text.length){
-      el.textContent+=text[i];
-      i++;
-      setTimeout(typing,30);
-    }
-  }
-  typing();
-}
-
-/* EFEK HUJAN */
-const c = document.getElementById("matrix");
-const ctx = c.getContext("2d");
-c.width = window.innerWidth;
-c.height = window.innerHeight;
-let raindrops = [];
-
-function createRain() {
-  raindrops = [];
-  for (let i = 0; i < 150; i++) {
-    raindrops.push({
-      x: Math.random() * c.width,
-      y: Math.random() * c.height,
-      length: Math.random() * 20 + 10,
-      speed: Math.random() * 5 + 3
-    });
-  }
-}
-
-function drawRain() {
-  ctx.clearRect(0, 0, c.width, c.height);
-  ctx.strokeStyle = "rgba(0, 255, 231, 0.4)"; 
-  ctx.lineWidth = 1;
-  ctx.lineCap = "round";
-  raindrops.forEach(r => {
-    ctx.beginPath(); ctx.moveTo(r.x, r.y); ctx.lineTo(r.x, r.y + r.length); ctx.stroke();
-    r.y += r.speed;
-    if (r.y > c.height) { r.y = -r.length; r.x = Math.random() * c.width; }
-  });
-  requestAnimationFrame(drawRain);
-}
-
-window.addEventListener("resize", () => {
-  c.width = window.innerWidth; c.height = window.innerHeight;
-  createRain();
-});
-
-createRain();
-drawRain();
 </script>
 
 </body>
