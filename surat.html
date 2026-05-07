@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>surat cinta</title>
+
+  <style>
+    body{
+      margin:0;
+      overflow:hidden;
+      height:100vh;
+      background:
+      radial-gradient(circle at top,#2b1d52,#0b0b1f 70%);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-family:monospace;
+      color:white;
+    }
+
+    /* =========================
+       BINTANG
+    ========================= */
+    .stars{
+      position:fixed;
+      inset:0;
+      overflow:hidden;
+    }
+
+    .star{
+      position:absolute;
+      width:2px;
+      height:2px;
+      background:white;
+      border-radius:50%;
+      box-shadow:0 0 10px white;
+      animation:twinkle linear infinite;
+    }
+
+    @keyframes twinkle{
+      0%{
+        opacity:.1;
+        transform:scale(.5);
+      }
+
+      50%{
+        opacity:1;
+        transform:scale(1.8);
+      }
+
+      100%{
+        opacity:.1;
+        transform:scale(.5);
+      }
+    }
+
+    /* =========================
+       CONTAINER
+    ========================= */
+    .container{
+      position:relative;
+      text-align:center;
+      z-index:5;
+      animation:float 4s ease-in-out infinite;
+    }
+
+    @keyframes float{
+      0%{
+        transform:translateY(0);
+      }
+
+      50%{
+        transform:translateY(-18px);
+      }
+
+      100%{
+        transform:translateY(0);
+      }
+    }
+
+    .panda{
+      position:relative;
+      width:260px;
+      height:320px;
+      margin:auto;
+    }
+
+    /* =========================
+       HEAD
+    ========================= */
+    .head{
+      position:absolute;
+      width:220px;
+      height:200px;
+      background:white;
+      border-radius:50%;
+      left:20px;
+      top:0;
+      box-shadow:0 0 40px rgba(255,255,255,.08);
+    }
+
+    /* EARS */
+    .ear{
+      position:absolute;
+      width:70px;
+      height:70px;
+      background:#111;
+      border-radius:50%;
+      top:-20px;
+    }
+
+    .ear.left{
+      left:15px;
+    }
+
+    .ear.right{
+      right:15px;
+    }
+
+    /* EYES */
+    .eyePatch{
+      position:absolute;
+      width:55px;
+      height:75px;
+      background:#111;
+      border-radius:50%;
+      top:65px;
+    }
+
+    .eyePatch.left{
+      left:38px;
+      transform:rotate(20deg);
+    }
+
+    .eyePatch.right{
+      right:38px;
+      transform:rotate(-20deg);
+    }
+
+    .eye{
+      position:absolute;
+      width:18px;
+      height:18px;
+      background:white;
+      border-radius:50%;
+      top:28px;
+      left:18px;
+      animation:blink 5s infinite;
+    }
+
+    @keyframes blink{
+      0%,45%,100%{
+        height:18px;
+      }
+
+      50%{
+        height:2px;
+      }
+    }
+
+    /* NOSE */
+    .nose{
+      position:absolute;
+      width:28px;
+      height:20px;
+      background:#111;
+      border-radius:50%;
+      top:120px;
+      left:96px;
+    }
+
+    /* MOUTH */
+    .mouth{
+      position:absolute;
+      width:40px;
+      height:20px;
+      border-bottom:3px solid #111;
+      border-radius:0 0 40px 40px;
+      top:138px;
+      left:90px;
+    }
+
+    /* =========================
+       BODY
+    ========================= */
+    .body{
+      position:absolute;
+      width:190px;
+      height:180px;
+      background:white;
+      border-radius:45%;
+      left:35px;
+      top:150px;
+    }
+
+    /* ARMS */
+    .arm{
+      position:absolute;
+      width:70px;
+      height:120px;
+      background:#111;
+      border-radius:40px;
+      top:170px;
+      z-index:2;
+    }
+
+    .arm.left{
+      left:5px;
+      transform:rotate(25deg);
+      animation:wave 2.5s infinite;
+      transform-origin:top center;
+    }
+
+    .arm.right{
+      right:5px;
+      transform:rotate(-25deg);
+    }
+
+    @keyframes wave{
+      0%{
+        transform:rotate(25deg);
+      }
+
+      50%{
+        transform:rotate(45deg);
+      }
+
+      100%{
+        transform:rotate(25deg);
+      }
+    }
+
+    /* LEGS */
+    .leg{
+      position:absolute;
+      width:70px;
+      height:90px;
+      background:#111;
+      border-radius:40px;
+      bottom:-10px;
+    }
+
+    .leg.left{
+      left:45px;
+    }
+
+    .leg.right{
+      right:45px;
+    }
+
+    /* =========================
+       SURAT
+    ========================= */
+    .letter{
+      position:absolute;
+      top:205px;
+      left:72px;
+      width:120px;
+      padding:12px;
+      background:#fff3dc;
+      color:#444;
+      border-radius:12px;
+      z-index:10;
+      cursor:pointer;
+      transition:.4s;
+      box-shadow:0 0 20px rgba(255,255,255,.15);
+    }
+
+    .letter:hover{
+      transform:scale(1.06);
+    }
+
+    /* =========================
+       POPUP
+    ========================= */
+    .paper{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.75);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      opacity:0;
+      pointer-events:none;
+      transition:1s;
+      z-index:99;
+      padding:20px;
+    }
+
+    .paper.show{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    /* BOX */
+    .paperContent{
+      width:90%;
+      max-width:700px;
+      height:75vh;
+      background:#fffaf3;
+      border-radius:28px;
+      overflow:hidden;
+      position:relative;
+      box-shadow:0 0 40px rgba(255,255,255,.15);
+      animation:pop .8s ease;
+    }
+
+    @keyframes pop{
+      from{
+        transform:scale(.7);
+        opacity:0;
+      }
+
+      to{
+        transform:scale(1);
+        opacity:1;
+      }
+    }
+
+    /* SLIDES */
+    .slides{
+      display:flex;
+      width:100%;
+      height:100%;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;
+    }
+
+    .slides::-webkit-scrollbar{
+      display:none;
+    }
+
+    /* CARD */
+    .slide{
+      min-width:100%;
+      height:100%;
+      flex-shrink:0;
+      scroll-snap-align:start;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:40px;
+      box-sizing:border-box;
+    }
+
+    .card{
+      width:100%;
+      max-width:500px;
+      background:white;
+      border-radius:28px;
+      padding:35px;
+      color:#444;
+      line-height:2;
+      font-size:17px;
+      text-align:center;
+      box-shadow:
+      0 10px 30px rgba(0,0,0,.08),
+      inset 0 0 0 1px rgba(255,255,255,.4);
+    }
+
+    .card h2{
+      color:#ff5c98;
+      margin-bottom:20px;
+    }
+
+    /* HINT */
+    .hint{
+      position:absolute;
+      bottom:18px;
+      width:100%;
+      text-align:center;
+      color:#999;
+      font-size:13px;
+      letter-spacing:1px;
+    }
+
+    /* CLOSE */
+    .close{
+      position:absolute;
+      top:15px;
+      right:15px;
+      border:none;
+      background:#ff5c98;
+      color:white;
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      cursor:pointer;
+      font-size:18px;
+      z-index:5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- BINTANG -->
+  <div class="stars"></div>
+
+  <!-- PANDA -->
+  <div class="container">
+
+    <div class="panda">
+
+      <div class="head">
+
+        <div class="ear left"></div>
+        <div class="ear right"></div>
+
+        <div class="eyePatch left">
+          <div class="eye"></div>
+        </div>
+
+        <div class="eyePatch right">
+          <div class="eye"></div>
+        </div>
+
+        <div class="nose"></div>
+        <div class="mouth"></div>
+
+      </div>
+
+      <div class="body"></div>
+
+      <div class="arm left"></div>
+      <div class="arm right"></div>
+
+      <div class="leg left"></div>
+      <div class="leg right"></div>
+
+      <!-- TOMBOL -->
+      <div class="letter" onclick="openLetter()">
+        💌 klik surat ini
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- SURAT -->
+  <div class="paper" id="paper">
+
+    <div class="paperContent">
+
+      <button class="close" onclick="closeLetter()">
+        ✕
+      </button>
+
+      <div class="slides">
+
+        <!-- SLIDE 1 -->
+        <div class="slide">
+          <div class="card">
+
+            <h2>untuk dina 🌸</h2>
+
+            <p>
+              aku sayang kamu dina...
+              lebih dari yang bisa aku jelasin lewat kata-kata sederhana.
+            </p>
+
+            <p>
+              geser ke samping ya 💌
+            </p>
+
+          </div>
+        </div>
+
+        <!-- SLIDE 2 -->
+        <div class="slide">
+          <div class="card">
+
+            <p>
+              setiap hari aku selalu berharap
+              semesta baik sama kamu.
+            </p>
+
+            <p>
+              aku berharap semua luka kamu
+              pelan-pelan sembuh,
+              dan semua sedih kamu berubah jadi bahagia.
+            </p>
+
+          </div>
+        </div>
+
+        <!-- SLIDE 3 -->
+        <div class="slide">
+          <div class="card">
+
+            <p>
+              kamu itu spesial banget.
+            </p>
+
+            <p>
+              mungkin kamu sering ngerasa biasa aja,
+              tapi buat aku,
+              kamu adalah salah satu alasan
+              kenapa dunia masih terasa indah 🌸
+            </p>
+
+          </div>
+        </div>
+
+        <!-- SLIDE 4 -->
+        <div class="slide">
+          <div class="card">
+
+            <p>
+              aku suka cara kamu tersenyum,
+              cara kamu ngomong,
+              bahkan hal kecil
+              yang mungkin nggak kamu sadari.
+            </p>
+
+          </div>
+        </div>
+
+        <!-- SLIDE 5 -->
+        <div class="slide">
+          <div class="card">
+
+            <p>
+              kalau nanti hidup lagi berat,
+              jangan lupa istirahat ya...
+            </p>
+
+            <p>
+              jangan terlalu keras
+              sama diri sendiri.
+            </p>
+
+            <p>
+              aku bangga sama kamu 🤍
+            </p>
+
+          </div>
+        </div>
+
+        <!-- SLIDE 6 -->
+        <div class="slide">
+          <div class="card">
+
+            <p>
+              akan selalu ada seseorang
+              yang nyebut nama kamu di doanya.
+            </p>
+
+            <h2>dan itu aku 🌸</h2>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="hint">
+        ← geser ke samping →
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    /* =========================
+       BINTANG
+    ========================= */
+    for(let i=0;i<160;i++){
+
+      const star=document.createElement("div");
+
+      star.className="star";
+      star.style.left=Math.random()*100+"vw";
+      star.style.top=Math.random()*100+"vh";
+      star.style.animationDuration=(2+Math.random()*5)+"s";
+
+      document.querySelector(".stars").appendChild(star);
+    }
+
+    /* =========================
+       OPEN LETTER
+    ========================= */
+    function openLetter(){
+      document.getElementById("paper").classList.add("show");
+    }
+
+    /* =========================
+       CLOSE LETTER
+    ========================= */
+    function closeLetter(){
+      document.getElementById("paper").classList.remove("show");
+    }
+  </script>
+
+</body>
+</html>
