@@ -158,20 +158,13 @@ body.active .flash{
 
 body.active .petal{
   background:linear-gradient(#ffd6ea,#ff5fa8);
-  box-shadow:
-    0 0 30px rgba(255,255,255,.9),
-    0 0 80px rgba(255,120,180,.9),
-    0 0 150px rgba(255,80,160,.7);
+  box-shadow:0 0 100px rgba(255,120,180,.9);
   transform:scale(1.08);
 }
 
 body.active .center{
   background:#fff4af;
-  box-shadow:0 0 80px rgba(255,230,120,.9);
-}
-
-body.active .leaf{
-  background:linear-gradient(#8dffb8,#2cff7f);
+  box-shadow:0 0 100px rgba(255,230,120,.9);
 }
 
 body.active .glow{
@@ -181,15 +174,15 @@ body.active .glow{
 
 body.active .text{
   color:white;
-  text-shadow:0 0 20px rgba(255,255,255,1);
 }
 
-/* PETALS FALL */
+/* FALLING PETALS */
 .petals{
   position:fixed;
   inset:0;
   overflow:hidden;
   pointer-events:none;
+  z-index:1;
 }
 
 .petal-fall{
@@ -200,15 +193,51 @@ body.active .text{
 }
 
 @keyframes fall{
-  0%{
-    transform:translateY(-50px) rotate(0);
-    opacity:0;
-  }
+  0%{transform:translateY(-50px);opacity:0;}
   10%{opacity:1;}
-  100%{
-    transform:translateY(110vh) rotate(360deg);
-    opacity:0;
-  }
+  100%{transform:translateY(110vh) rotate(360deg);opacity:0;}
+}
+
+/* LIGHT DUST */
+.dust{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:0;
+}
+
+.dot{
+  position:absolute;
+  width:3px;
+  height:3px;
+  background:white;
+  border-radius:50%;
+  opacity:.3;
+  animation:float 8s linear infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(100vh);opacity:0;}
+  20%{opacity:.6;}
+  100%{transform:translateY(-10vh);opacity:0;}
+}
+
+/* MESSAGE */
+.msgBox{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(.8);
+  padding:20px 25px;
+  background:rgba(0,0,0,.6);
+  color:white;
+  font-size:16px;
+  text-align:center;
+  border-radius:12px;
+  opacity:0;
+  transition:1.2s;
+  z-index:999;
 }
 
 /* ANIMATION */
@@ -247,6 +276,7 @@ body.active .text{
 
 <div class="flash"></div>
 <div class="tap">klik dong mawarnya 🌸</div>
+
 <div class="glow"></div>
 
 <div class="flower">
@@ -269,11 +299,34 @@ body.active .text{
 </div>
 
 <div class="petals"></div>
+<div class="dust"></div>
 
 <script>
 let timeout;
 let clickCount = 0;
 
+const messages = [
+  "jangan terlalu capek ya... kamu udah hebat 🌸",
+  "aku bangga sama kamu, serius.",
+  "kalau dunia jahat, aku tetap di sini.",
+  "kamu itu berharga, jangan lupa itu.",
+  "pelan-pelan aja, kamu nggak sendiri."
+];
+
+/* DUST */
+function createDust(){
+  const dust = document.querySelector(".dust");
+  for(let i=0;i<40;i++){
+    const d=document.createElement("div");
+    d.className="dot";
+    d.style.left=Math.random()*100+"vw";
+    d.style.animationDuration=(4+Math.random()*6)+"s";
+    dust.appendChild(d);
+  }
+}
+createDust();
+
+/* CLICK */
 function shineFlower(){
 
   document.body.classList.add("active");
@@ -286,56 +339,51 @@ function shineFlower(){
 
   clickCount++;
 
-  if(clickCount === 5){
+  if(clickCount===3){
     showMessage();
+    clickCount=0;
   }
 
   clearTimeout(timeout);
 
-  timeout = setTimeout(()=>{
+  timeout=setTimeout(()=>{
     document.body.classList.remove("active");
   },2500);
 }
 
 /* PETALS */
 function createPetals(){
-
-  for(let i=0;i<12;i++){
-    const p = document.createElement("div");
-    p.className = "petal-fall";
-    p.innerHTML = "🌸";
-    p.style.left = Math.random()*100 + "vw";
-    p.style.animationDuration = (3 + Math.random()*3) + "s";
-    p.style.fontSize = (16 + Math.random()*20) + "px";
-
+  for(let i=0;i<10;i++){
+    const p=document.createElement("div");
+    p.className="petal-fall";
+    p.innerHTML="🌸";
+    p.style.left=Math.random()*100+"vw";
+    p.style.animationDuration=(3+Math.random()*3)+"s";
     document.querySelector(".petals").appendChild(p);
 
     setTimeout(()=>p.remove(),6000);
   }
 }
 
-/* SECRET MESSAGE */
+/* MESSAGE */
 function showMessage(){
-  const msg = document.createElement("div");
-  msg.innerHTML = "makasih ya... udah hadir di hidup aku 🌸";
-  msg.style.position="fixed";
-  msg.style.inset="0";
-  msg.style.display="flex";
-  msg.style.alignItems="center";
-  msg.style.justifyContent="center";
-  msg.style.background="rgba(0,0,0,.7)";
-  msg.style.color="white";
-  msg.style.fontSize="20px";
-  msg.style.textAlign="center";
-  msg.style.zIndex="999";
+
+  const msg=document.createElement("div");
+  msg.className="msgBox";
+  msg.innerText=messages[Math.floor(Math.random()*messages.length)];
 
   document.body.appendChild(msg);
 
   setTimeout(()=>{
-    msg.style.transition="1s";
+    msg.style.opacity="1";
+    msg.style.transform="translate(-50%,-50%) scale(1)";
+  },100);
+
+  setTimeout(()=>{
     msg.style.opacity="0";
+    msg.style.transform="translate(-50%,-50%) scale(.8)";
     setTimeout(()=>msg.remove(),1000);
-  },3000);
+  },3500);
 }
 </script>
 
