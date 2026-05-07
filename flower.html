@@ -16,7 +16,7 @@ body{
   height:100vh;
   font-family:monospace;
   cursor:pointer;
-  transition:1.5s;
+  transition:1.2s;
 }
 
 /* FLASH */
@@ -121,7 +121,7 @@ body{
   transform-origin:left center;
 }
 
-/* MAIN TEXT */
+/* TEXT */
 .text{
   position:absolute;
   bottom:55px;
@@ -136,7 +136,7 @@ body{
   z-index:2;
 }
 
-/* CLICK TEXT */
+/* TAP TEXT */
 .tap{
   position:absolute;
   top:40px;
@@ -147,22 +147,13 @@ body{
   z-index:5;
 }
 
-/* ACTIVE */
+/* ACTIVE MODE */
 body.active{
-  background:
-  radial-gradient(circle at center,
-  #ffd8ec 0%,
-  #ff9ccc 40%,
-  #ff5fa8 75%,
-  #ff3b8d 100%);
+  background:radial-gradient(circle at center,#ffd8ec,#ff5fa8,#ff3b8d);
 }
 
 body.active .flash{
   opacity:.4;
-}
-
-body.active .flower{
-  transform:scale(1.08);
 }
 
 body.active .petal{
@@ -171,35 +162,53 @@ body.active .petal{
     0 0 30px rgba(255,255,255,.9),
     0 0 80px rgba(255,120,180,.9),
     0 0 150px rgba(255,80,160,.7);
+  transform:scale(1.08);
 }
 
 body.active .center{
   background:#fff4af;
-  box-shadow:
-    0 0 40px rgba(255,255,255,1),
-    0 0 100px rgba(255,230,120,.9);
+  box-shadow:0 0 80px rgba(255,230,120,.9);
 }
 
 body.active .leaf{
   background:linear-gradient(#8dffb8,#2cff7f);
-  box-shadow:0 0 30px rgba(80,255,160,.6);
-}
-
-body.active .stem{
-  box-shadow:0 0 30px rgba(0,255,120,.8);
-}
-
-body.active .text{
-  color:white;
-  text-shadow:
-    0 0 15px rgba(255,255,255,1),
-    0 0 35px rgba(255,255,255,.8),
-    0 0 70px rgba(255,120,180,.7);
 }
 
 body.active .glow{
   background:rgba(255,180,220,.4);
   transform:scale(1.5);
+}
+
+body.active .text{
+  color:white;
+  text-shadow:0 0 20px rgba(255,255,255,1);
+}
+
+/* PETALS FALL */
+.petals{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.petal-fall{
+  position:absolute;
+  top:-50px;
+  font-size:20px;
+  animation:fall linear forwards;
+}
+
+@keyframes fall{
+  0%{
+    transform:translateY(-50px) rotate(0);
+    opacity:0;
+  }
+  10%{opacity:1;}
+  100%{
+    transform:translateY(110vh) rotate(360deg);
+    opacity:0;
+  }
 }
 
 /* ANIMATION */
@@ -222,18 +231,9 @@ body.active .glow{
 }
 
 @keyframes pulse{
-  0%{
-    transform:scale(1);
-    opacity:.5;
-  }
-  50%{
-    transform:scale(1.15);
-    opacity:.9;
-  }
-  100%{
-    transform:scale(1);
-    opacity:.5;
-  }
+  0%{transform:scale(1);opacity:.5;}
+  50%{transform:scale(1.15);opacity:.9;}
+  100%{transform:scale(1);opacity:.5;}
 }
 
 @keyframes blink{
@@ -246,15 +246,10 @@ body.active .glow{
 <body onclick="shineFlower()">
 
 <div class="flash"></div>
-
-<div class="tap">
-  klik dong mawarnya 🌸
-</div>
-
+<div class="tap">klik dong mawarnya 🌸</div>
 <div class="glow"></div>
 
 <div class="flower">
-
   <div class="petal p1"></div>
   <div class="petal p2"></div>
   <div class="petal p3"></div>
@@ -266,7 +261,6 @@ body.active .glow{
 
   <div class="leaf left"></div>
   <div class="leaf right"></div>
-
 </div>
 
 <div class="text">
@@ -274,8 +268,11 @@ body.active .glow{
   tapi diam-diam selalu mekar tiap kali liat kamu bahagia 🌸
 </div>
 
+<div class="petals"></div>
+
 <script>
 let timeout;
+let clickCount = 0;
 
 function shineFlower(){
 
@@ -285,12 +282,60 @@ function shineFlower(){
     navigator.vibrate([100,50,100]);
   }
 
+  createPetals();
+
+  clickCount++;
+
+  if(clickCount === 5){
+    showMessage();
+  }
+
   clearTimeout(timeout);
 
   timeout = setTimeout(()=>{
     document.body.classList.remove("active");
   },2500);
+}
 
+/* PETALS */
+function createPetals(){
+
+  for(let i=0;i<12;i++){
+    const p = document.createElement("div");
+    p.className = "petal-fall";
+    p.innerHTML = "🌸";
+    p.style.left = Math.random()*100 + "vw";
+    p.style.animationDuration = (3 + Math.random()*3) + "s";
+    p.style.fontSize = (16 + Math.random()*20) + "px";
+
+    document.querySelector(".petals").appendChild(p);
+
+    setTimeout(()=>p.remove(),6000);
+  }
+}
+
+/* SECRET MESSAGE */
+function showMessage(){
+  const msg = document.createElement("div");
+  msg.innerHTML = "makasih ya... udah hadir di hidup aku 🌸";
+  msg.style.position="fixed";
+  msg.style.inset="0";
+  msg.style.display="flex";
+  msg.style.alignItems="center";
+  msg.style.justifyContent="center";
+  msg.style.background="rgba(0,0,0,.7)";
+  msg.style.color="white";
+  msg.style.fontSize="20px";
+  msg.style.textAlign="center";
+  msg.style.zIndex="999";
+
+  document.body.appendChild(msg);
+
+  setTimeout(()=>{
+    msg.style.transition="1s";
+    msg.style.opacity="0";
+    setTimeout(()=>msg.remove(),1000);
+  },3000);
 }
 </script>
 
