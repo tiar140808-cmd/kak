@@ -15,99 +15,136 @@ body{
   align-items:center;
   height:100vh;
   font-family:monospace;
+  cursor:pointer;
 }
 
-/* GLOW */
+/* BACKGROUND GLOW */
 .glow{
   position:absolute;
-  width:400px;
-  height:400px;
+  width:500px;
+  height:500px;
   background:rgba(255,0,120,.08);
   border-radius:50%;
-  filter:blur(80px);
+  filter:blur(100px);
+  animation:pulse 5s ease-in-out infinite;
 }
 
 /* FLOWER */
 .flower{
   position:relative;
-  width:220px;
-  height:420px;
-  animation:sway 4s ease-in-out infinite;
+  width:240px;
+  height:430px;
   transform-origin:bottom center;
+  animation:sway 4s ease-in-out infinite;
+  transition:.8s;
 }
 
 /* STEM */
 .stem{
   position:absolute;
   width:10px;
-  height:240px;
-  background:linear-gradient(#2eff7b,#0b8f48);
-  left:105px;
+  height:250px;
+  background:linear-gradient(#39ff88,#0a9448);
+  left:115px;
   top:150px;
-  border-radius:20px;
+  border-radius:30px;
+  box-shadow:0 0 10px rgba(0,255,120,.3);
 }
 
 /* PETALS */
 .petal{
   position:absolute;
-  width:90px;
-  height:90px;
-  background:linear-gradient(#ff6aa9,#ff2f7d);
+  width:95px;
+  height:95px;
+  background:linear-gradient(#ff84bd,#ff2f7d);
   border-radius:50%;
-  box-shadow:0 0 20px rgba(255,80,140,.5);
+  box-shadow:0 0 20px rgba(255,80,140,.4);
+  transition:1s;
 }
 
-.p1{top:40px;left:65px;}
-.p2{top:75px;left:30px;}
-.p3{top:75px;left:100px;}
-.p4{top:115px;left:65px;}
+.p1{top:35px;left:72px;}
+.p2{top:75px;left:35px;}
+.p3{top:75px;left:110px;}
+.p4{top:118px;left:72px;}
 
+/* CENTER */
 .center{
   position:absolute;
-  width:70px;
-  height:70px;
+  width:75px;
+  height:75px;
   background:#ffd95c;
   border-radius:50%;
-  top:90px;
-  left:75px;
+  top:92px;
+  left:82px;
   z-index:2;
-  box-shadow:0 0 25px rgba(255,217,92,.7);
+  box-shadow:0 0 20px rgba(255,217,92,.5);
+  transition:1s;
 }
 
 /* LEAF HANDS */
 .leaf{
   position:absolute;
-  width:90px;
+  width:95px;
   height:45px;
-  background:linear-gradient(#46ff88,#0fa958);
+  background:linear-gradient(#52ff95,#0ba357);
   border-radius:100px 0;
-  top:220px;
+  top:235px;
 }
 
 .left{
-  left:25px;
+  left:18px;
   transform:rotate(-35deg);
-  animation:waveLeft 2s ease-in-out infinite;
+  animation:waveLeft 2.5s ease-in-out infinite;
   transform-origin:right center;
 }
 
 .right{
-  right:25px;
+  right:18px;
   transform:scaleX(-1) rotate(-35deg);
-  animation:waveRight 2s ease-in-out infinite;
+  animation:waveRight 2.5s ease-in-out infinite;
   transform-origin:left center;
 }
 
 /* TEXT */
 .text{
   position:absolute;
-  bottom:60px;
+  bottom:55px;
   text-align:center;
   color:#ffd6e8;
   font-size:18px;
-  text-shadow:0 0 10px rgba(255,255,255,.4);
-  line-height:1.8;
+  text-shadow:0 0 12px rgba(255,255,255,.3);
+  line-height:1.9;
   width:90%;
+  opacity:.85;
+  transition:1s;
+}
+
+/* CLICK EFFECT */
+body.active .petal{
+  background:linear-gradient(#ffb3d7,#ff4f98);
+  box-shadow:
+    0 0 25px rgba(255,120,180,.8),
+    0 0 60px rgba(255,80,160,.6),
+    0 0 120px rgba(255,50,140,.4);
+  transform:scale(1.08);
+}
+
+body.active .center{
+  box-shadow:
+    0 0 30px rgba(255,230,120,.9),
+    0 0 80px rgba(255,220,90,.7);
+}
+
+body.active .text{
+  color:#fff0f6;
+  text-shadow:
+    0 0 10px rgba(255,255,255,.8),
+    0 0 25px rgba(255,120,180,.5);
+  opacity:1;
+}
+
+body.active .glow{
+  background:rgba(255,70,150,.18);
 }
 
 /* ANIMATION */
@@ -119,19 +156,34 @@ body{
 
 @keyframes waveLeft{
   0%{transform:rotate(-35deg);}
-  50%{transform:rotate(-15deg);}
+  50%{transform:rotate(-12deg);}
   100%{transform:rotate(-35deg);}
 }
 
 @keyframes waveRight{
   0%{transform:scaleX(-1) rotate(-35deg);}
-  50%{transform:scaleX(-1) rotate(-15deg);}
+  50%{transform:scaleX(-1) rotate(-12deg);}
   100%{transform:scaleX(-1) rotate(-35deg);}
+}
+
+@keyframes pulse{
+  0%{
+    transform:scale(1);
+    opacity:.5;
+  }
+  50%{
+    transform:scale(1.15);
+    opacity:.9;
+  }
+  100%{
+    transform:scale(1);
+    opacity:.5;
+  }
 }
 </style>
 </head>
 
-<body>
+<body onclick="shineFlower()">
 
 <div class="glow"></div>
 
@@ -152,9 +204,15 @@ body{
 </div>
 
 <div class="text">
-  buat kamu yang selalu cantik<br>
-  bahkan saat dunia lagi jahat sama kamu 🌸
+  aku cuma bunga kecil yang ga bisa kamu miliki...<br>
+  tapi diam-diam selalu mekar tiap kali liat kamu bahagia 🌸
 </div>
+
+<script>
+function shineFlower(){
+  document.body.classList.toggle("active");
+}
+</script>
 
 </body>
 </html>
