@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>flower</title>
+
+<style>
+body{
+  margin:0;
+  overflow:hidden;
+  background:radial-gradient(circle at center,#101428,#050510);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  font-family:monospace;
+}
+
+/* GLOW */
+.glow{
+  position:absolute;
+  width:400px;
+  height:400px;
+  background:rgba(255,0,120,.08);
+  border-radius:50%;
+  filter:blur(80px);
+}
+
+/* FLOWER */
+.flower{
+  position:relative;
+  width:220px;
+  height:420px;
+  animation:sway 4s ease-in-out infinite;
+  transform-origin:bottom center;
+}
+
+/* STEM */
+.stem{
+  position:absolute;
+  width:10px;
+  height:240px;
+  background:linear-gradient(#2eff7b,#0b8f48);
+  left:105px;
+  top:150px;
+  border-radius:20px;
+}
+
+/* PETALS */
+.petal{
+  position:absolute;
+  width:90px;
+  height:90px;
+  background:linear-gradient(#ff6aa9,#ff2f7d);
+  border-radius:50%;
+  box-shadow:0 0 20px rgba(255,80,140,.5);
+}
+
+.p1{top:40px;left:65px;}
+.p2{top:75px;left:30px;}
+.p3{top:75px;left:100px;}
+.p4{top:115px;left:65px;}
+
+.center{
+  position:absolute;
+  width:70px;
+  height:70px;
+  background:#ffd95c;
+  border-radius:50%;
+  top:90px;
+  left:75px;
+  z-index:2;
+  box-shadow:0 0 25px rgba(255,217,92,.7);
+}
+
+/* LEAF HANDS */
+.leaf{
+  position:absolute;
+  width:90px;
+  height:45px;
+  background:linear-gradient(#46ff88,#0fa958);
+  border-radius:100px 0;
+  top:220px;
+}
+
+.left{
+  left:25px;
+  transform:rotate(-35deg);
+  animation:waveLeft 2s ease-in-out infinite;
+  transform-origin:right center;
+}
+
+.right{
+  right:25px;
+  transform:scaleX(-1) rotate(-35deg);
+  animation:waveRight 2s ease-in-out infinite;
+  transform-origin:left center;
+}
+
+/* TEXT */
+.text{
+  position:absolute;
+  bottom:60px;
+  text-align:center;
+  color:#ffd6e8;
+  font-size:18px;
+  text-shadow:0 0 10px rgba(255,255,255,.4);
+  line-height:1.8;
+  width:90%;
+}
+
+/* ANIMATION */
+@keyframes sway{
+  0%{transform:rotate(-2deg);}
+  50%{transform:rotate(2deg);}
+  100%{transform:rotate(-2deg);}
+}
+
+@keyframes waveLeft{
+  0%{transform:rotate(-35deg);}
+  50%{transform:rotate(-15deg);}
+  100%{transform:rotate(-35deg);}
+}
+
+@keyframes waveRight{
+  0%{transform:scaleX(-1) rotate(-35deg);}
+  50%{transform:scaleX(-1) rotate(-15deg);}
+  100%{transform:scaleX(-1) rotate(-35deg);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="glow"></div>
+
+<div class="flower">
+
+  <div class="petal p1"></div>
+  <div class="petal p2"></div>
+  <div class="petal p3"></div>
+  <div class="petal p4"></div>
+
+  <div class="center"></div>
+
+  <div class="stem"></div>
+
+  <div class="leaf left"></div>
+  <div class="leaf right"></div>
+
+</div>
+
+<div class="text">
+  buat kamu yang selalu cantik<br>
+  bahkan saat dunia lagi jahat sama kamu 🌸
+</div>
+
+</body>
+</html>
