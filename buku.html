@@ -3,299 +3,196 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Graduation Dina</title>
+<title>Dina Graduation</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
 body{
+background:black;
 overflow:hidden;
-background:black;
-color:white;
-}
-
-/* ================= ROTATE LOCK ================= */
-#rotate{
-position:fixed;
-inset:0;
-display:flex;
-justify-content:center;
-align-items:center;
-background:black;
-color:#ff4fd8;
-font-size:22px;
-z-index:9999;
-text-align:center;
-padding:20px;
-text-shadow:0 0 20px #ff4fd8;
 }
 
 /* ================= LOADING ================= */
 #loading{
 position:fixed;
 inset:0;
-display:none;
+display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 background:black;
-z-index:10;
+z-index:999;
 }
 
 #loading img{
-width:140px;
-height:140px;
+width:120px;
+height:120px;
 border-radius:50%;
-border:3px solid #ff4fd8;
-box-shadow:0 0 25px #ff4fd8;
 object-fit:cover;
-animation:pop 1.5s infinite;
+border:2px solid #ff4fd8;
+box-shadow:0 0 20px #ff4fd8;
 }
 
 #loading h2{
-margin-top:20px;
+margin-top:15px;
 color:#ff77dd;
-text-shadow:0 0 15px #ff4fd8;
+text-align:center;
 }
 
-.loader{
-margin-top:20px;
-width:200px;
-height:6px;
-background:#222;
-border-radius:10px;
+/* ================= BOOK (KAYA BUKU ASLI) ================= */
+#book{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:260px;
+height:360px;
+border-radius:16px;
 overflow:hidden;
+box-shadow:0 0 25px rgba(255,255,255,0.25);
+background:#111;
 }
 
-.bar{
-height:100%;
-width:0%;
-background:#ff4fd8;
-animation:load 3s forwards;
-}
-
-@keyframes load{to{width:100%;}}
-
-@keyframes pop{
-50%{transform:scale(1.1);}
-}
-
-/* ================= BOOK ================= */
-#main{
-display:none;
-position:fixed;
-inset:0;
-background:radial-gradient(circle,#222,#000);
-justify-content:center;
-align-items:center;
-}
-
-.book{
-width:340px;
-height:240px;
-position:relative;
-}
-
-.cover{
+.card{
 position:absolute;
 width:100%;
 height:100%;
-background:linear-gradient(135deg,#fff,#eee);
-border-radius:10px;
-transform-origin:left;
-transition:1s ease;
-z-index:5;
+transition:0.6s ease;
 }
 
-.page{
-position:absolute;
-width:100%;
-height:100%;
-border-radius:10px;
-overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,0.3);
-transform-origin:left;
-transition:0.8s ease;
-}
-
-.page img{
+.card img{
 width:100%;
 height:100%;
 object-fit:cover;
 }
 
-.flip{
-transform:rotateY(-160deg);
+.hide{
+transform:translateX(-120%) rotate(-8deg);
+opacity:0;
 }
 
-.hint{
-position:absolute;
-bottom:15px;
-width:100%;
-text-align:center;
-font-size:13px;
-color:#aaa;
-}
-
-/* ================= LOVE GALAXY ================= */
-#loveScene{
-display:none;
+/* ================= LOVE ================= */
+#love{
 position:fixed;
 inset:0;
-background:radial-gradient(circle,#111,#000,#000);
+display:none;
+background:radial-gradient(circle,#000,#111,#000);
 overflow:hidden;
-cursor:grab;
 }
 
 .photo{
 position:absolute;
 width:60px;
 height:60px;
-border-radius:12px;
+border-radius:50%;
 border:2px solid white;
 box-shadow:0 0 15px #ff4fd8;
-transition:transform 0.2s;
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- ROTATE -->
-<div id="rotate">📱 Putar HP ke SAMPING dulu</div>
-
 <!-- LOADING -->
 <div id="loading">
 <img src="profil.jpg">
-<h2>Loading kenangan untuk Dina...</h2>
-<div class="loader"><div class="bar"></div></div>
+<h2>HAPPY GRADUATION DINA</h2>
 </div>
 
 <!-- BOOK -->
-<div id="main">
-<div class="book">
-
-<div class="cover" id="cover"></div>
-
-<div class="page" id="p1"><img src="foto.jpg"></div>
-<div class="page" id="p2"><img src="foto2.jpg"></div>
-<div class="page" id="p3"><img src="foto3.jpg"></div>
-
-</div>
-
-<div class="hint">← geser untuk membuka halaman →</div>
+<div id="book">
+<div class="card" id="c1"><img src="foto.jpg"></div>
+<div class="card" id="c2"><img src="foto2.jpg"></div>
+<div class="card" id="c3"><img src="foto3.jpg"></div>
 </div>
 
 <!-- LOVE -->
-<div id="loveScene"></div>
+<div id="love"></div>
 
 <script>
 
-/* ================= LOCK ================= */
-function check(){
-
-const r=document.getElementById("rotate");
-
-if(window.innerHeight > window.innerWidth){
-
-r.style.display="flex";
-document.getElementById("loading").style.display="none";
-document.getElementById("main").style.display="none";
-document.getElementById("loveScene").style.display="none";
-
-}else{
-
-r.style.display="none";
-
-if(!window.started){
-startLoading();
-window.started=true;
-}
-
-}
-
-}
-
-window.addEventListener("load",check);
-window.addEventListener("resize",check);
-
 /* ================= LOADING ================= */
-function startLoading(){
-
-document.getElementById("loading").style.display="flex";
-
 setTimeout(()=>{
-
 document.getElementById("loading").style.display="none";
-document.getElementById("main").style.display="flex";
-
-},3500);
-
-}
+},2500);
 
 /* ================= BOOK SWIPE ================= */
-let page=0;
-let startX=0;
-
-const pages=[
-document.getElementById("p1"),
-document.getElementById("p2"),
-document.getElementById("p3")
+const cards=[
+document.getElementById("c1"),
+document.getElementById("c2"),
+document.getElementById("c3")
 ];
+
+let index=0;
+let startX=0;
+let down=false;
 
 document.addEventListener("touchstart",e=>{
 startX=e.touches[0].clientX;
+down=true;
 });
 
 document.addEventListener("touchend",e=>{
+if(!down) return;
+down=false;
+
 let endX=e.changedTouches[0].clientX;
 
 if(startX-endX>50){
-
-if(page===0){
-document.getElementById("cover").style.transform="rotateY(-140deg)";
-}
-
-if(page<pages.length){
-pages[page].classList.add("flip");
-page++;
-
-if(page===pages.length){
-setTimeout(showLove,800);
-}
-}
+next();
 }
 });
+
+document.addEventListener("mousedown",e=>{
+startX=e.clientX;
+down=true;
+});
+
+document.addEventListener("mouseup",e=>{
+if(!down) return;
+down=false;
+
+let endX=e.clientX;
+
+if(startX-endX>50){
+next();
+}
+});
+
+function next(){
+if(index < cards.length){
+cards[index].classList.add("hide");
+index++;
+}
+
+if(index >= cards.length){
+showLove();
+}
+}
 
 /* ================= LOVE GALAXY ================= */
 function showLove(){
 
-document.getElementById("main").style.display="none";
+document.getElementById("book").style.display="none";
 
-const love=document.getElementById("loveScene");
+const love=document.getElementById("love");
 love.style.display="block";
 
 const photos=["foto.jpg","foto2.jpg","foto3.jpg"];
 
-const cx=window.innerWidth/2;
-const cy=window.innerHeight/2;
+let cx=window.innerWidth/2;
+let cy=window.innerHeight/2;
 
-/* camera */
-let rotX=0;
-let rotY=0;
-let zoom=1;
+let rotX=0, rotY=0, zoom=1;
+let down=false, lastX=0, lastY=0;
 
-let isDown=false;
-let lastX=0;
-let lastY=0;
-
-/* points */
 let points=[];
 
+/* galaxy spiral */
 for(let i=0;i<220;i++){
 let a=i*0.25;
-let r=6*i;
+let r=i*3;
 
 points.push({
 x:Math.cos(a)*r,
@@ -304,64 +201,37 @@ z:i*2
 });
 }
 
-/* create images */
 points.forEach((p,i)=>{
-
 const img=document.createElement("img");
-img.src=photos[i%photos.length];
+img.src=photos[i%3];
 img.className="photo";
-
-img.style.left=cx+"px";
-img.style.top=cy+"px";
-
 love.appendChild(img);
-
 p.el=img;
-
 });
 
-/* drag */
+/* drag rotate */
 love.addEventListener("mousedown",e=>{
-isDown=true;
+down=true;
 lastX=e.clientX;
 lastY=e.clientY;
 });
 
-love.addEventListener("mouseup",()=>isDown=false);
+love.addEventListener("mouseup",()=>down=false);
+
 love.addEventListener("mousemove",e=>{
+if(!down) return;
 
-if(!isDown) return;
-
-rotY += (e.clientX-lastX)*0.01;
-rotX += (e.clientY-lastY)*0.01;
+rotY+=(e.clientX-lastX)*0.01;
+rotX+=(e.clientY-lastY)*0.01;
 
 lastX=e.clientX;
 lastY=e.clientY;
-
-});
-
-/* touch */
-love.addEventListener("touchstart",e=>{
-isDown=true;
-lastX=e.touches[0].clientX;
-lastY=e.touches[0].clientY;
-});
-
-love.addEventListener("touchmove",e=>{
-if(!isDown) return;
-
-rotY += (e.touches[0].clientX-lastX)*0.01;
-rotX += (e.touches[0].clientY-lastY)*0.01;
-
-lastX=e.touches[0].clientX;
-lastY=e.touches[0].clientY;
-
 });
 
 /* zoom */
 love.addEventListener("wheel",e=>{
-zoom += e.deltaY * -0.001;
-zoom=Math.min(Math.max(0.3,zoom),3);
+zoom+=e.deltaY*-0.001;
+zoom=Math.max(0.3,Math.min(3,zoom));
 });
 
 /* render */
@@ -369,26 +239,17 @@ function animate(){
 
 points.forEach(p=>{
 
-let x=p.x;
-let y=p.y;
-let z=p.z;
+let y=p.y*Math.cos(rotX)-p.z*Math.sin(rotX);
+let z=p.y*Math.sin(rotX)+p.z*Math.cos(rotX);
 
-/* rotate X */
-let dy=y*Math.cos(rotX)-z*Math.sin(rotX);
-let dz=y*Math.sin(rotX)+z*Math.cos(rotX);
+let x=p.x*Math.cos(rotY)+z*Math.sin(rotY);
+z=p.x*-Math.sin(rotY)+z*Math.cos(rotY);
 
-/* rotate Y */
-let dx=x*Math.cos(rotY)+dz*Math.sin(rotY);
-dz=x*-Math.sin(rotY)+dz*Math.cos(rotY);
-
-let depth=1/(dz+800);
+let depth=1/(z+500);
 
 p.el.style.transform=
-`translate3d(${cx + dx*depth*zoom}px,
-${cy + dy*depth*zoom}px,0)
-scale(${depth*3*zoom}) rotate(${rotY*40}deg)`;
-
-p.el.style.opacity=Math.min(1,depth*2);
+`translate(${cx+x*depth*zoom}px,${cy+y*depth*zoom}px)
+scale(${depth*3*zoom})`;
 
 });
 
