@@ -3,250 +3,178 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dina Love Book</title>
-
+<title>Buku & Love</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#111;color:white;font-family:sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;overflow:hidden;}
 
-body{
-background:#0b0b0f;
-overflow:hidden;
-}
+  /* LOADING */
+  #loading{
+    position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#111;z-index:10;
+  }
+  #loading img{width:120px;height:120px;border-radius:50%;margin-bottom:20px;animation:fade 1.5s infinite;}
+  @keyframes fade{0%,100%{opacity:0.2;}50%{opacity:1;}}
 
-/* ================= LOADING ================= */
-#loading{
-position:fixed;
-inset:0;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-background:black;
-z-index:999;
-}
+  /* BUKU */
+  #bookContainer{
+    width:360px;height:480px;position:relative;z-index:5;display:none;
+  }
+  .page{
+    width:100%;height:100%;background:white;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.5);
+    display:flex;justify-content:center;align-items:center;overflow:hidden;position:absolute;top:0;left:0;transition:transform 0.5s ease;
+  }
+  .page img{width:90%;border-radius:10px;object-fit:cover;}
 
-#loading img{
-width:120px;
-height:120px;
-border-radius:50%;
-object-fit:cover;
-border:2px solid #ff4fd8;
-box-shadow:0 0 20px #ff4fd8;
-}
+  #prev,#next{
+    position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);border:none;color:white;font-size:24px;padding:10px 15px;border-radius:8px;cursor:pointer;
+  }
+  #prev{left:-60px;}
+  #next{right:-60px;}
 
-#loading p{
-color:#ff77dd;
-margin-top:15px;
-}
-
-/* ================= BOOK ================= */
-#book{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-width:280px;
-height:380px;
-perspective:1200px;
-}
-
-.page{
-position:absolute;
-width:100%;
-height:100%;
-background:white;
-border-radius:12px;
-overflow:hidden;
-transition:0.6s;
-box-shadow:0 10px 25px rgba(0,0,0,.4);
-}
-
-.page img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.hide{
-transform:rotateY(-120deg);
-opacity:0;
-}
-
-/* ================= LOVE ================= */
-#love{
-position:fixed;
-inset:0;
-display:none;
-}
-
-#loveBox{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-width:420px;
-height:420px;
-}
-
-/* small photos */
-.photo{
-position:absolute;
-width:18px;
-height:18px;
-border-radius:50%;
-object-fit:cover;
-border:1px solid white;
-box-shadow:0 0 8px #ff4fd8;
-}
+  /* LOVE FORMATION */
+  #loveScene{position:absolute;inset:0;display:none;justify-content:center;align-items:center;}
+  .lovePhoto{
+    position:absolute;width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid white;cursor:grab;
+    opacity:0; transform: scale(0);
+    transition: all 0.5s ease;
+  }
 </style>
 </head>
-
 <body>
 
-<!-- LOADING -->
 <div id="loading">
-<img src="profil.jpg">
-<p>Loading surat spesial...</p>
+  <img src="profil.jpg" alt="Loading Profil">
+  <div>Loading...</div>
 </div>
 
-<!-- BOOK -->
-<div id="book">
-
-<div class="page" id="p0"><img src="cover_depan.jpg"></div>
-<div class="page" id="p1"><img src="foto.jpg"></div>
-<div class="page" id="p2"><img src="foto2.jpg"></div>
-<div class="page" id="p3"><img src="foto3.jpg"></div>
-<div class="page" id="p4"><img src="cover_belakang.jpg"></div>
-
+<div id="bookContainer">
+  <div class="page" id="coverFront">Cover Depan</div>
+  <div class="page"><img src="foto.jpg"></div>
+  <div class="page"><img src="foto2.jpg"></div>
+  <div class="page"><img src="foto3.jpg"></div>
+  <div class="page" id="coverBack">Cover Belakang</div>
+  <button id="prev">&#8592;</button>
+  <button id="next">&#8594;</button>
 </div>
 
-<!-- LOVE -->
-<div id="love">
-<div id="loveBox"></div>
-</div>
+<div id="loveScene"></div>
 
 <script>
+  // ================= LOADING =================
+  window.addEventListener('load',()=>{
+    setTimeout(()=>{
+      document.getElementById('loading').style.display='none';
+      document.getElementById('bookContainer').style.display='block';
+    },1500);
+  });
 
-/* ================= LOADING ================= */
-setTimeout(()=>{
-document.getElementById("loading").style.display="none";
-},2000);
+  // ================= BUKU =================
+  const pages = Array.from(document.querySelectorAll('#bookContainer .page'));
+  let current = 0;
+  pages.forEach((p,i)=>{p.style.transform=`translateX(${i*100}%)`});
 
-/* ================= BOOK SWIPE ================= */
-const pages=[
-document.getElementById("p0"),
-document.getElementById("p1"),
-document.getElementById("p2"),
-document.getElementById("p3"),
-document.getElementById("p4")
-];
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
 
-let i=0;
-let startX=0;
+  function updatePages(){
+    pages.forEach((p,i)=>{p.style.transform=`translateX(${(i-current)*100}%)`});
+    if(current === pages.length -1){
+      setTimeout(startLove,500);
+    }
+  }
 
-function next(){
-if(i < pages.length){
-pages[i].classList.add("hide");
-i++;
-}
+  prevBtn.addEventListener('click',()=>{if(current>0){current--;updatePages();}});
+  nextBtn.addEventListener('click',()=>{if(current<pages.length-1){current++;updatePages();}});
 
-if(i >= pages.length){
-setTimeout(showLove,500);
-}
-}
+  let startX=0;
+  const bookContainer = document.getElementById('bookContainer');
+  bookContainer.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;});
+  bookContainer.addEventListener('touchend',e=>{
+    let endX=e.changedTouches[0].clientX;
+    if(startX-endX>50 && current<pages.length-1){current++;updatePages();}
+    else if(endX-startX>50 && current>0){current--;updatePages();}
+  });
 
-document.addEventListener("touchstart",e=>{
-startX=e.touches[0].clientX;
-});
+  // ================= LOVE FORMATION =================
+  const loveScene = document.getElementById('loveScene');
+  const lovePhotos = ['foto.jpg','foto2.jpg','foto3.jpg'];
+  let loveElements=[];
 
-document.addEventListener("touchend",e=>{
-let endX=e.changedTouches[0].clientX;
-if(startX-endX > 50){
-next();
-}
-});
+  function startLove(){
+    document.getElementById('bookContainer').style.display='none';
+    loveScene.style.display='flex';
 
-document.addEventListener("mousedown",e=>{
-startX=e.clientX;
-});
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const scale = 15;
+    let points=[];
+    for(let t=0;t<Math.PI*2;t+=0.15){
+      let x = 16*Math.pow(Math.sin(t),3);
+      let y = -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
+      points.push({x:width/2+x*scale,y:height/2+y*scale});
+    }
 
-document.addEventListener("mouseup",e=>{
-let endX=e.clientX;
-if(startX-endX > 50){
-next();
-}
-});
+    points.forEach((p,i)=>{
+      setTimeout(()=>{
+        const img = document.createElement('img');
+        img.src = lovePhotos[i%lovePhotos.length];
+        img.className='lovePhoto';
+        img.style.left = width/2 + 'px';
+        img.style.top = height/2 + 'px';
+        loveScene.appendChild(img);
+        loveElements.push(img);
 
-/* ================= LOVE MESH ================= */
-function showLove(){
+        // efek muncul satu per satu
+        setTimeout(()=>{
+          img.style.left = p.x + 'px';
+          img.style.top = p.y + 'px';
+          img.style.opacity = 1;
+          img.style.transform = 'scale(1)';
+        },50);
+      }, i*80); // delay per foto
+    });
+  }
 
-document.getElementById("book").style.display="none";
-document.getElementById("love").style.display="block";
+  // ================= DRAG & ZOOM =================
+  let isDragging=false, startDrag={x:0,y:0}, currentImg=null;
 
-const box=document.getElementById("loveBox");
+  function startDragFunc(e){
+    if(e.target.classList.contains('lovePhoto')){
+      isDragging=true;
+      currentImg=e.target;
+      startDrag={x:(e.clientX||e.touches[0].clientX) - currentImg.offsetLeft, y:(e.clientY||e.touches[0].clientY) - currentImg.offsetTop};
+    }
+  }
+  function moveDragFunc(e){
+    if(isDragging && currentImg){
+      const cx = e.clientX || e.touches[0].clientX;
+      const cy = e.clientY || e.touches[0].clientY;
+      currentImg.style.left = (cx - startDrag.x) + 'px';
+      currentImg.style.top = (cy - startDrag.y) + 'px';
+    }
+  }
+  function endDragFunc(){isDragging=false; currentImg=null;}
 
-const photos=["foto.jpg","foto2.jpg","foto3.jpg"];
+  loveScene.addEventListener('mousedown', startDragFunc);
+  loveScene.addEventListener('mousemove', moveDragFunc);
+  loveScene.addEventListener('mouseup', endDragFunc);
+  loveScene.addEventListener('mouseleave', endDragFunc);
 
-/* LOVE SHAPE POINTS */
-let points=[];
+  loveScene.addEventListener('touchstart', startDragFunc);
+  loveScene.addEventListener('touchmove', moveDragFunc);
+  loveScene.addEventListener('touchend', endDragFunc);
 
-for(let t=0;t<Math.PI*2;t+=0.08){
-let x=16*Math.pow(Math.sin(t),3);
-let y=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
-points.push({x:x*10,y:y*10});
-}
-
-/* CREATE PHOTOS */
-points.forEach((p,i)=>{
-let img=document.createElement("img");
-img.src=photos[i%3];
-img.className="photo";
-
-img.style.left="50%";
-img.style.top="50%";
-
-box.appendChild(img);
-
-setTimeout(()=>{
-img.style.left=200+p.x+"px";
-img.style.top=200+p.y+"px";
-},100);
-});
-
-/* ROTATE + ZOOM CONTROL */
-let rot=0;
-let zoom=1;
-let down=false;
-let lx=0,ly=0;
-
-box.addEventListener("mousedown",e=>{
-down=true;
-lx=e.clientX;
-ly=e.clientY;
-});
-
-document.addEventListener("mouseup",()=>down=false);
-
-document.addEventListener("mousemove",e=>{
-if(!down) return;
-
-rot+=(e.clientX-lx)*0.01;
-lx=e.clientX;
-ly=e.clientY;
-
-box.style.transform=`translate(-50%,-50%) rotate(${rot}rad) scale(${zoom})`;
-});
-
-box.addEventListener("wheel",e=>{
-zoom+=e.deltaY*-0.001;
-zoom=Math.min(Math.max(0.3,zoom),2.5);
-
-box.style.transform=`translate(-50%,-50%) rotate(${rot}rad) scale(${zoom})`;
-});
-
-}
-
+  loveScene.addEventListener('wheel', e=>{
+    e.preventDefault();
+    loveElements.forEach(img=>{
+      let transform = img.style.transform || '';
+      let m = transform.match(/scale\(([\d\.]+)\)/);
+      let s = m ? parseFloat(m[1]) : 1;
+      s += e.deltaY * -0.001;
+      if(s<0.2)s=0.2;if(s>3)s=3;
+      img.style.transform = `scale(${s})`;
+    });
+  });
 </script>
-
 </body>
 </html>
