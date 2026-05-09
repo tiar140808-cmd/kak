@@ -3,24 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dina Love Book 3D</title>
+<title>Dina Love Book FIX</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
   background:#0b0b12;
-  font-family:sans-serif;
   height:100vh;
   overflow:hidden;
   display:flex;
   justify-content:center;
   align-items:center;
-  color:white;
+  font-family:sans-serif;
 }
 
 /* LOADING */
 #loading{
-  position:fixed;
-  inset:0;
+  position:fixed;inset:0;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -29,97 +28,86 @@ body{
   z-index:999;
 }
 #loading img{
-  width:120px;
-  height:120px;
+  width:120px;height:120px;
   border-radius:50%;
   object-fit:cover;
   border:2px solid #ff4fd8;
-  box-shadow:0 0 20px #ff4fd8;
-}
-#loading p{
-  margin-top:15px;
-  color:#ff77dd;
 }
 
 /* BOOK */
 #book{
   width:300px;
   height:400px;
-  perspective:1000px;
+  perspective:1200px;
   position:relative;
 }
-.cover{
+
+.page, .cover{
   position:absolute;
   width:100%;
   height:100%;
   border-radius:10px;
-  backface-visibility:hidden;
-  transition:1s;
   overflow:hidden;
-  box-shadow:0 10px 30px rgba(0,0,0,.5);
+  transition:1s;
+  transform-origin:left;
+  box-shadow:0 10px 25px rgba(0,0,0,.4);
 }
-.cover img, .page img{
+
+.page img, .cover img{
   width:100%;
   height:100%;
   object-fit:cover;
 }
-.page{
-  position:absolute;
-  width:100%;
-  height:100%;
-  border-radius:10px;
-  overflow:hidden;
-  transform-origin:left;
-  transition:1s;
-}
+
 .flip{
   transform:rotateY(-160deg);
 }
 
-/* LOVE 3D */
+/* LOVE */
 #love{
   position:fixed;
   inset:0;
   display:none;
   justify-content:center;
   align-items:center;
-  perspective:1000px;
 }
+
 #loveBox{
-  width:600px;
-  height:600px;
+  width:650px;
+  height:650px;
   position:relative;
   transform-style:preserve-3d;
 }
+
 .loveImg{
-  width:50px;
-  height:50px;
-  object-fit:cover;
+  width:45px;
+  height:45px;
   position:absolute;
-  top:50%;
-  left:50%;
+  object-fit:cover;
+  border-radius:0;
   opacity:0;
   transform:scale(0);
-  transition:1s ease;
-  border-radius:10px;
+  transition:0.8s ease;
 }
 </style>
 </head>
+
 <body>
 
 <!-- LOADING -->
 <div id="loading">
   <img src="profil.jpg">
-  <p>Loading...</p>
 </div>
 
 <!-- BOOK -->
 <div id="book">
-  <div class="cover" id="front"><img src="cover.jpg"></div>
+
+  <div class="cover" id="c1"><img src="cover.jpg"></div>
   <div class="page" id="p1"><img src="foto.jpg"></div>
   <div class="page" id="p2"><img src="foto2.jpg"></div>
   <div class="page" id="p3"><img src="foto3.jpg"></div>
-  <div class="cover" id="back"><img src="cover.jpg"></div>
+  <div class="cover" id="c2"><img src="cover.jpg"></div>
+
 </div>
 
 <!-- LOVE -->
@@ -128,91 +116,90 @@ body{
 </div>
 
 <script>
+
 /* LOADING */
 setTimeout(()=>{
   document.getElementById("loading").style.display="none";
-},2000);
+},1500);
 
-/* BOOK SWIPE */
-let page=0;
-const pages=[document.getElementById("p1"),document.getElementById("p2"),document.getElementById("p3")];
-let startX=0;
+/* BOOK FLOW FIX */
+let pages=[
+  document.getElementById("p1"),
+  document.getElementById("p2"),
+  document.getElementById("p3")
+];
 
-document.addEventListener("touchstart",e=>{ startX=e.touches[0].clientX; });
-document.addEventListener("touchend",e=>{ let endX=e.changedTouches[0].clientX; if(startX-endX>50) next(); });
-document.addEventListener("mousedown",e=>{ startX=e.clientX; });
-document.addEventListener("mouseup",e=>{ let endX=e.clientX; if(startX-endX>50) next(); });
+let i=0;
 
-function next(){
-  if(page<pages.length){
-    pages[page].classList.add("flip");
-    page++;
+document.addEventListener("click",()=>{
+  if(i < pages.length){
+    pages[i].classList.add("flip");
+    i++;
   }
-  if(page===pages.length){
-    setTimeout(showLove,800);
+  else if(i === pages.length){
+    i++;
+    startLove();
   }
-}
+});
 
-/* LOVE 3D FORMATION */
-function showLove(){
+/* LOVE FIX */
+function startLove(){
+
   document.getElementById("book").style.display="none";
-  const loveDiv=document.getElementById("love");
-  loveDiv.style.display="flex";
+  document.getElementById("love").style.display="flex";
+
   const box=document.getElementById("loveBox");
   const imgs=["foto.jpg","foto2.jpg","foto3.jpg"];
-  const points=[];
 
-  // heart shape formula
-  for(let t=0;t<Math.PI*2;t+=0.12){
+  let points=[];
+
+  // PADAT LOVE (NO BOLONG TENGAH)
+  for(let t=0;t<Math.PI*2;t+=0.08){
     let x=16*Math.pow(Math.sin(t),3);
     let y=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
-    let z=(Math.random()-0.5)*20; // depth
-    points.push({x:x*15,y:y*15,z:z});
+
+    // isi tengah biar ga bolong
+    for(let k=0;k<3;k++){
+      points.push({
+        x:x*15 + (Math.random()-0.5)*10,
+        y:y*15 + (Math.random()-0.5)*10
+      });
+    }
   }
 
-  points.forEach((p,i)=>{
+  let used=0;
+
+  points.forEach((p,idx)=>{
+
     setTimeout(()=>{
+
+      // STOP kalau sudah cukup (ANTI BUG NGELEBIHIN)
+      if(used > 120) return;
+
       let img=document.createElement("img");
-      img.src=imgs[i%3];
+      img.src=imgs[used%3];
       img.className="loveImg";
+
       box.appendChild(img);
-      img.style.opacity=1;
-      img.style.transform=`translate3d(${p.x}px,${p.y}px,${p.z}px) scale(1)`;
-    },i*100); // smooth pelan
+
+      img.style.left="50%";
+      img.style.top="50%";
+
+      setTimeout(()=>{
+        img.style.opacity=1;
+        img.style.transform="scale(1)";
+        img.style.left=300+p.x+"px";
+        img.style.top=300+p.y+"px";
+      },50);
+
+      used++;
+
+    }, idx*40); // pelan & smooth
+
   });
 
-  // DRAG ROTATE
-  let rotX=0, rotY=0, down=false, lx=0, ly=0;
-  box.addEventListener("mousedown",e=>{ down=true; lx=e.clientX; ly=e.clientY; });
-  document.addEventListener("mouseup",()=>down=false);
-  document.addEventListener("mousemove",e=>{
-    if(!down) return;
-    rotY+=(e.clientX-lx)*0.01;
-    rotX+=(e.clientY-ly)*0.01;
-    lx=e.clientX; ly=e.clientY;
-    box.style.transform=`rotateX(${rotX}rad) rotateY(${rotY}rad)`;
-  });
-
-  // TOUCH rotate
-  box.addEventListener("touchstart",e=>{ down=true; lx=e.touches[0].clientX; ly=e.touches[0].clientY; });
-  document.addEventListener("touchend",()=>down=false);
-  document.addEventListener("touchmove",e=>{
-    if(!down) return;
-    rotY+=(e.touches[0].clientX-lx)*0.01;
-    rotX+=(e.touches[0].clientY-ly)*0.01;
-    lx=e.touches[0].clientX; ly=e.touches[0].clientY;
-    box.style.transform=`rotateX(${rotX}rad) rotateY(${rotY}rad)`;
-  });
-
-  // ZOOM
-  let scale=1;
-  document.addEventListener("wheel",e=>{
-    scale+=e.deltaY*-0.001;
-    if(scale<0.5) scale=0.5;
-    if(scale>3) scale=3;
-    box.style.transform+=` scale(${scale})`;
-  });
 }
+
 </script>
 </body>
 </html>
