@@ -320,6 +320,22 @@ body{
   z-index:5;
 }
 
+/* tombol kembali */
+
+.backBtn{
+  position:absolute;
+  top:15px;
+  left:15px;
+  padding:10px 18px;
+  border:none;
+  border-radius:15px;
+  background:#444;
+  color:white;
+  cursor:pointer;
+  z-index:5;
+  font-weight:600;
+}
+
 /* =========================
    SLIDES
 ========================= */
@@ -426,9 +442,70 @@ body{
   font-weight:600;
 }
 
+.giftBtn{
+  margin-top:20px;
+  display:none;
+  border:none;
+  background:#8b5cf6;
+  color:white;
+  padding:14px 25px;
+  border-radius:20px;
+  cursor:pointer;
+  font-size:16px;
+}
+
 /* =========================
-   HINT
+   HADIAH PAGE
 ========================= */
+
+.giftPage{
+  position:fixed;
+  inset:0;
+  background:#111827;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:999;
+  padding:20px;
+  text-align:center;
+}
+
+.giftPage.show{
+  display:flex;
+}
+
+.giftPage h1{
+  font-family:'Sacramento',cursive;
+  font-size:60px;
+  margin-bottom:20px;
+  color:#ff9ecf;
+}
+
+.giftPage img{
+  width:90%;
+  max-width:450px;
+  border-radius:25px;
+  box-shadow:0 0 35px rgba(255,255,255,.2);
+}
+
+.giftPage p{
+  margin-top:20px;
+  font-size:18px;
+  max-width:600px;
+  line-height:1.8;
+}
+
+.homeBtn{
+  margin-top:25px;
+  border:none;
+  background:#ff5ea8;
+  color:white;
+  padding:14px 25px;
+  border-radius:20px;
+  cursor:pointer;
+  font-size:16px;
+}
 
 .hint{
   position:absolute;
@@ -489,6 +566,8 @@ body{
 <div class="paper" id="paper">
 
   <div class="paperContent">
+
+    <button class="backBtn" onclick="closeLetter()">← kembali</button>
 
     <button class="close" onclick="closeLetter()">✕</button>
 
@@ -560,7 +639,7 @@ body{
           <h2>mini game 🎮</h2>
 
           <p>
-            pencet tombol hati ini terus 🤍
+            pencet tombol hati ini sampai 25x 🤍
           </p>
 
           <div class="gameBox">
@@ -572,6 +651,10 @@ body{
             <div id="loveText">
               kamu dicintai 0 kali
             </div>
+
+            <button class="giftBtn" id="giftBtn" onclick="openGift()">
+              🎁 klik ya ada hadiah
+            </button>
 
           </div>
 
@@ -605,6 +688,25 @@ body{
     </div>
 
   </div>
+
+</div>
+
+<!-- HALAMAN HADIAH -->
+
+<div class="giftPage" id="giftPage">
+
+  <h1>hadiah untuk dina 💖</h1>
+
+  <img src="bkt.jpg" alt="foto hadiah">
+
+  <p>
+    makasih ya udah mencet sampai 25x 🤍<br>
+    semoga scan ini bisa bikin kamu senyum kecil hari ini 🌸
+  </p>
+
+  <button class="homeBtn" onclick="closeGift()">
+    ← kembali
+  </button>
 
 </div>
 
@@ -656,6 +758,28 @@ function addLove(){
     document.getElementById("loveText").innerHTML=
     "ih lucu banget kamu masih dipencet terus 🌸";
   }
+
+  if(love==25){
+
+    document.getElementById("loveText").innerHTML=
+    "yeay 25x 🎉 baca dulu teks terakhir yaa baru pencet tombol hadiah 🤍";
+
+    document.getElementById("giftBtn").style.display="inline-block";
+  }
+
+}
+
+/* hadiah */
+
+function openGift(){
+
+  document.getElementById("giftPage").classList.add("show");
+
+}
+
+function closeGift(){
+
+  document.getElementById("giftPage").classList.remove("show");
 
 }
 
