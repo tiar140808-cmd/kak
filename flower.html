@@ -328,6 +328,7 @@ body.active .text{
 <script>
 let timeout;
 let clickCount = 0;
+let currentMessage = 0;
 
 const messages = [
   "jangan terlalu capek ya... kamu udah hebat 🌸",
@@ -340,11 +341,12 @@ const messages = [
   "kontoll",
   "tapii dedee ndaa baless dengan kataa' ituu",
   "lopyuuuuu💋",
-  "pelan-pelan aja, kamu nggak sendiri."
+  "pelan-pelan aja, kamu ndaa sendiri."
 ];
 
 function createDust(){
   const dust = document.querySelector(".dust");
+
   for(let i=0;i<40;i++){
     const d=document.createElement("div");
     d.className="dot";
@@ -353,6 +355,7 @@ function createDust(){
     dust.appendChild(d);
   }
 }
+
 createDust();
 
 function shineFlower(){
@@ -367,9 +370,10 @@ function shineFlower(){
 
   clickCount++;
 
-  if(clickCount===3){
+  // muncul pesan tiap 2 klik
+  if(clickCount >= 2){
     showMessage();
-    clickCount=0;
+    clickCount = 0;
   }
 
   clearTimeout(timeout);
@@ -380,15 +384,21 @@ function shineFlower(){
 }
 
 function createPetals(){
+
   for(let i=0;i<10;i++){
+
     const p=document.createElement("div");
     p.className="petal-fall";
     p.innerHTML="🌸";
+
     p.style.left=Math.random()*100+"vw";
     p.style.animationDuration=(3+Math.random()*3)+"s";
+
     document.querySelector(".petals").appendChild(p);
 
-    setTimeout(()=>p.remove(),6000);
+    setTimeout(()=>{
+      p.remove();
+    },6000);
   }
 }
 
@@ -396,7 +406,17 @@ function showMessage(){
 
   const msg=document.createElement("div");
   msg.className="msgBox";
-  msg.innerText=messages[Math.floor(Math.random()*messages.length)];
+
+  // pesan berurutan
+  msg.innerText = messages[currentMessage];
+
+  // lanjut ke pesan berikutnya
+  currentMessage++;
+
+  // reset kalau sudah habis
+  if(currentMessage >= messages.length){
+    currentMessage = 0;
+  }
 
   document.body.appendChild(msg);
 
@@ -408,7 +428,11 @@ function showMessage(){
   setTimeout(()=>{
     msg.style.opacity="0";
     msg.style.transform="translate(-50%,-50%) scale(.8)";
-    setTimeout(()=>msg.remove(),1000);
+
+    setTimeout(()=>{
+      msg.remove();
+    },1000);
+
   },3500);
 }
 </script>
