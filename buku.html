@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graduation Dina</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+
+body{
+overflow:hidden;
+background:black;
+color:white;
+}
+
+/* ================= ORIENTATION LOCK ================= */
+#rotate{
+position:fixed;
+inset:0;
+display:none;
+justify-content:center;
+align-items:center;
+text-align:center;
+background:black;
+color:#ff4fd8;
+font-size:26px;
+z-index:999;
+padding:20px;
+text-shadow:0 0 20px #ff4fd8;
+}
+
+/* ================= MATRIX ================= */
+canvas{
+position:fixed;
+inset:0;
+z-index:0;
+}
+
+/* ================= OPENING ================= */
+#opening{
+position:fixed;
+inset:0;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:black;
+z-index:5;
+}
+
+#centerText{
+font-size:38px;
+color:#ff77dd;
+text-shadow:0 0 20px #ff4fd8;
+margin-bottom:20px;
+animation:pulse 2s infinite;
+}
+
+#countdown{
+font-size:120px;
+text-shadow:0 0 25px #ff4fd8;
+}
+
+/* ================= BOOK ================= */
+#main{
+display:none;
+position:fixed;
+inset:0;
+background:radial-gradient(circle,#222,#000);
+}
+
+/* BOOK WRAP */
+#bookWrap{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) scale(0.6);
+opacity:0;
+transition:1s ease;
+}
+
+/* BOOK ANIMATION IN */
+#bookWrap.show{
+transform:translate(-50%,-50%) scale(1);
+opacity:1;
+}
+
+/* BOOK */
+#book{
+position:relative;
+width:340px;
+height:240px;
+perspective:2000px;
+}
+
+/* COVER */
+#cover{
+position:absolute;
+width:100%;
+height:100%;
+background:white;
+border-radius:10px;
+box-shadow:0 20px 40px rgba(0,0,0,0.6);
+transform-origin:left;
+transition:1s ease;
+z-index:5;
+}
+
+/* PAGES */
+.page{
+position:absolute;
+width:100%;
+height:100%;
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+transform-origin:left;
+transition:0.8s cubic-bezier(.2,.8,.2,1);
+}
+
+.page img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+#p1{z-index:3;}
+#p2{z-index:2;}
+#p3{z-index:1;}
+
+.flip{
+transform:rotateY(-160deg) translateX(-15px);
+filter:brightness(0.9);
+}
+
+/* SPINE */
+#spine{
+position:absolute;
+left:50%;
+top:0;
+width:20px;
+height:100%;
+transform:translateX(-50%);
+background:linear-gradient(to right,transparent,#000,transparent);
+opacity:0.3;
+}
+
+/* ================= LOVE ================= */
+#loveScene{
+display:none;
+position:fixed;
+inset:0;
+background:black;
+}
+
+.photo{
+position:absolute;
+width:60px;
+height:60px;
+object-fit:cover;
+border-radius:12px;
+border:2px solid white;
+box-shadow:0 0 15px #ff4fd8;
+transition:1s ease;
+}
+
+/* ANIM */
+@keyframes pulse{
+50%{transform:scale(1.1);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ROTATE WARNING -->
+<div id="rotate">
+📱 Miringkan HP ke SAMPING (Landscape) dulu ya
+</div>
+
+<canvas id="matrix"></canvas>
+
+<!-- OPENING -->
+<div id="opening">
+<div id="centerText">HAPPY GRADUATION DINA</div>
+<div id="countdown">3</div>
+</div>
+
+<!-- BOOK -->
+<div id="main">
+
+<div id="bookWrap">
+
+<div id="book">
+
+<div id="cover"></div>
+
+<div id="p1" class="page"><img src="foto.jpg"></div>
+<div id="p2" class="page"><img src="foto2.jpg"></div>
+<div id="p3" class="page"><img src="foto3.jpg"></div>
+
+<div id="spine"></div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- LOVE -->
+<div id="loveScene"></div>
+
+<script>
+
+/* ================= ORIENTATION CHECK ================= */
+function checkOrientation(){
+if(window.innerHeight > window.innerWidth){
+document.getElementById("rotate").style.display="flex";
+}else{
+document.getElementById("rotate").style.display="none";
+}
+}
+setInterval(checkOrientation,500);
+
+/* ================= MATRIX ================= */
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+const letters="HAPPY GRADUATION".split("");
+const drops=Array(60).fill(0);
+
+let rain=true;
+
+function draw(){
+if(!rain) return;
+
+ctx.fillStyle="rgba(0,0,0,0.15)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#ff4fd8";
+ctx.font="18px monospace";
+
+for(let i=0;i<drops.length;i++){
+let char=letters[Math.floor(Math.random()*letters.length)];
+ctx.fillText(char,i*20,drops[i]*20);
+
+if(drops[i]*20>canvas.height) drops[i]=0;
+drops[i]++;
+}
+}
+setInterval(draw,40);
+
+/* ================= COUNTDOWN ================= */
+let num=3;
+const cd=document.getElementById("countdown");
+
+const timer=setInterval(()=>{
+
+cd.innerHTML=num;
+num--;
+
+if(num<0){
+clearInterval(timer);
+
+/* stop rain */
+rain=false;
+canvas.style.display="none";
+
+/* show book */
+document.getElementById("opening").style.display="none";
+document.getElementById("main").style.display="block";
+
+/* BOOK INTRO ANIMATION */
+setTimeout(()=>{
+document.getElementById("bookWrap").classList.add("show");
+},500);
+
+}
+
+},1000);
+
+/* ================= BOOK SWIPE ================= */
+let page=0;
+let startX=0;
+
+const pages=[
+document.getElementById("p1"),
+document.getElementById("p2"),
+document.getElementById("p3")
+];
+
+document.addEventListener("touchstart",e=>{
+startX=e.touches[0].clientX;
+});
+
+document.addEventListener("touchend",e=>{
+let endX=e.changedTouches[0].clientX;
+
+if(startX-endX>50){
+
+if(page===0){
+document.getElementById("cover").style.transform="rotateY(-140deg)";
+}
+
+if(page<pages.length){
+pages[page].classList.add("flip");
+page++;
+
+if(page===pages.length){
+setTimeout(showLove,800);
+}
+}
+}
+});
+
+/* ================= LOVE ================= */
+function showLove(){
+
+document.getElementById("main").style.display="none";
+
+const love=document.getElementById("loveScene");
+love.style.display="block";
+
+const photos=["foto.jpg","foto2.jpg","foto3.jpg"];
+
+const cx=window.innerWidth/2;
+const cy=window.innerHeight/2;
+const scale=12;
+
+let points=[];
+
+for(let t=0;t<Math.PI*2;t+=0.08){
+let x=16*Math.pow(Math.sin(t),3);
+let y=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
+points.push({x:cx+x*scale,y:cy+y*scale});
+}
+
+points.forEach((p,i)=>{
+
+setTimeout(()=>{
+
+const img=document.createElement("img");
+img.src=photos[i%photos.length];
+img.className="photo";
+
+img.style.left=cx+"px";
+img.style.top=cy+"px";
+img.style.transform="scale(0)";
+
+love.appendChild(img);
+
+setTimeout(()=>{
+img.style.left=p.x+"px";
+img.style.top=p.y+"px";
+img.style.transform="scale(1)";
+},40);
+
+},i*15);
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
