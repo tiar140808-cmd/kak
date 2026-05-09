@@ -9,271 +9,67 @@
 
 <style>
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-  overflow:hidden;
   height:100vh;
+  overflow:hidden;
   font-family:'Poppins',sans-serif;
   background: radial-gradient(circle at top,#2d1b69,#0d1026 70%);
   display:flex;
   justify-content:center;
   align-items:center;
   color:white;
-
-  transition: opacity 1s ease, transform 1s ease;
 }
 
-body.fadeOut{
-  opacity:0;
-  transform:scale(1.05);
+/* BOOK */
+.book{
+  width:100%;
+  max-width:900px;
+  height:80vh;
 }
 
-/* STARS */
-.stars{
-  position:fixed;
-  inset:0;
-  overflow:hidden;
+.pages{
+  display:flex;
+  width:100%;
+  height:100%;
+  overflow-x:scroll;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-x;
 }
 
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:white;
-  border-radius:50%;
-  box-shadow:0 0 10px white;
-  animation:twinkle linear infinite;
-}
+.pages::-webkit-scrollbar{display:none;}
 
-@keyframes twinkle{
-  0%,100%{opacity:.2;transform:scale(.5);}
-  50%{opacity:1;transform:scale(1.8);}
-}
-
-/* FLOAT */
-.container{
-  position:relative;
-  z-index:5;
-  animation:float 4s ease-in-out infinite;
-}
-
-@keyframes float{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-18px);}
-}
-
-/* PANDA */
-.panda{
-  position:relative;
-  width:280px;
-  height:340px;
-}
-
-.head{
-  position:absolute;
-  width:220px;
-  height:200px;
-  background:white;
-  border-radius:50%;
-  left:30px;
-  top:0;
-}
-
-.ear{
-  position:absolute;
-  width:70px;
-  height:70px;
-  background:#111;
-  border-radius:50%;
-  top:-20px;
-}
-
-.ear.left{left:10px;}
-.ear.right{right:10px;}
-
-.eyePatch{
-  position:absolute;
-  width:55px;
-  height:75px;
-  background:#111;
-  border-radius:50%;
-  top:65px;
-}
-
-.eyePatch.left{left:38px;transform:rotate(20deg);}
-.eyePatch.right{right:38px;transform:rotate(-20deg);}
-
-.eye{
-  position:absolute;
-  width:18px;
-  height:18px;
-  background:white;
-  border-radius:50%;
-  top:28px;
-  left:18px;
-  animation:blink 5s infinite;
-}
-
-@keyframes blink{
-  0%,45%,100%{height:18px;}
-  50%{height:2px;}
-}
-
-.nose{
-  position:absolute;
-  width:28px;
-  height:20px;
-  background:#111;
-  border-radius:50%;
-  top:120px;
-  left:96px;
-}
-
-.mouth{
-  position:absolute;
-  width:40px;
-  height:20px;
-  border-bottom:3px solid #111;
-  border-radius:0 0 40px 40px;
-  top:138px;
-  left:90px;
-}
-
-.body{
-  position:absolute;
-  width:190px;
-  height:180px;
-  background:white;
-  border-radius:45%;
-  left:45px;
-  top:150px;
-}
-
-.arm{
-  position:absolute;
-  width:70px;
-  height:120px;
-  background:#111;
-  border-radius:40px;
-  top:170px;
-}
-
-.arm.left{
-  left:5px;
-  transform:rotate(25deg);
-  animation:wave 2s infinite;
-  transform-origin:top center;
-}
-
-.arm.right{
-  right:5px;
-  transform:rotate(-25deg);
-}
-
-@keyframes wave{
-  0%,100%{transform:rotate(25deg);}
-  50%{transform:rotate(45deg);}
-}
-
-.leg{
-  position:absolute;
-  width:70px;
-  height:90px;
-  background:#111;
-  border-radius:40px;
-  bottom:-10px;
-}
-
-.leg.left{left:45px;}
-.leg.right{right:45px;}
-
-/* BUTTON */
-.letter{
-  position:absolute;
-  top:205px;
-  left:78px;
-  width:125px;
-  padding:14px;
-  background:linear-gradient(135deg,#ff8dc7,#ff5ea8);
-  color:white;
-  border-radius:18px;
-  text-align:center;
-  font-weight:600;
-  cursor:pointer;
-}
-
-/* PAPER */
-.paper{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.8);
+.page{
+  flex:0 0 100%;
+  height:100%;
+  scroll-snap-align:start;
   display:flex;
   justify-content:center;
   align-items:center;
-  opacity:0;
-  pointer-events:none;
-  transition:1s;
-  z-index:99;
   padding:20px;
 }
 
-.paper.show{
-  opacity:1;
-  pointer-events:auto;
-}
-
-.paperContent{
-  width:90%;
-  max-width:750px;
-  height:80vh;
-  background:linear-gradient(to bottom,#fffaf5,#ffeef5);
-  border-radius:35px;
-  overflow:hidden;
-}
-
-/* SLIDES */
-.slides{
-  display:flex;
-  width:100%;
-  height:100%;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-}
-
-.slide{
-  min-width:100%;
-  height:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:40px;
-}
-
 /* CARD */
-.card{
+.paper{
   width:100%;
-  max-width:530px;
-  background:rgba(255,255,255,.75);
-  border-radius:30px;
-  padding:40px;
-  text-align:center;
+  max-width:620px;
+  background:white;
   color:#444;
+  padding:35px;
+  border-radius:18px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
 }
 
-.card h2{
+.paper h2{
   font-family:'Sacramento',cursive;
-  font-size:55px;
+  font-size:52px;
   color:#ff5ea8;
-}
-
-.highlight{
-  color:#ff5ea8;
-  font-weight:700;
+  margin-bottom:10px;
 }
 
 /* GAME */
@@ -281,53 +77,62 @@ body.fadeOut{
   margin-top:20px;
   background:#ff5ea8;
   color:white;
-  padding:14px 25px;
-  border-radius:20px;
-  cursor:pointer;
+  padding:12px 20px;
+  border:none;
+  border-radius:15px;
 }
 
 .giftBtn{
+  margin-top:15px;
   display:none;
-  margin-top:20px;
   background:#8b5cf6;
   color:white;
-  padding:14px 25px;
-  border-radius:20px;
-  cursor:pointer;
+  padding:12px 20px;
+  border:none;
+  border-radius:15px;
 }
 
 /* GIFT */
 .giftPage{
   position:fixed;
   inset:0;
-  background:#111827;
+  background:rgba(0,0,0,.9);
   display:none;
   justify-content:center;
   align-items:center;
-  flex-direction:column;
-  z-index:999;
 }
 
-.giftPage.show{
-  display:flex;
-}
+.giftPage.show{display:flex;}
 
-/* LINK */
-#toBook{
-  position:fixed;
-  bottom:20px;
-  width:100%;
+.giftCard{
+  background:white;
+  padding:25px;
+  border-radius:20px;
   text-align:center;
-  color:#ff9ecf;
-  font-size:18px;
-  font-weight:600;
-  cursor:pointer;
-  z-index:9999;
-  animation:pulse 1.5s infinite;
+  color:#333;
 }
 
-@keyframes pulse{
-  50%{transform:scale(1.1);}
+.giftCard img{
+  width:280px;
+  border-radius:15px;
+}
+
+/* SLIDE 6 BUTTON */
+.slide6Btn{
+  margin-top:25px;
+  background:#ff5ea8;
+  color:white;
+  padding:14px 25px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,.3);
+}
+
+.slide6Btn:active{
+  transform:scale(.97);
 }
 
 </style>
@@ -335,145 +140,115 @@ body.fadeOut{
 
 <body>
 
-<div class="stars"></div>
+<div class="book">
+<div class="pages">
 
-<div class="container">
-  <div class="panda">
+<!-- 1 -->
+<div class="page"><div class="paper">
+<h2>📌 petunjuk</h2>
+<p>
+surat ini mungkin sederhana, tapi isinya jujur.<br><br>
+geser ke kanan untuk lanjut baca pelan-pelan ya.<br>
+jangan buru-buru, karena setiap halaman punya cerita kecil tentang kamu 🤍
+</p>
+</div></div>
 
-    <div class="head">
-      <div class="ear left"></div>
-      <div class="ear right"></div>
+<!-- 2 -->
+<div class="page"><div class="paper">
+<h2>untuk dina 🌸</h2>
+<p>
+aku gaaa tau sejak kapan kamu jadi bagian penting di hidup aku,<br><br>
+tapi yang aku tau, sekarang setiap hari tanpa kamu rasanya beda.<br><br>
+kamu itu bukan cuma orang yang aku kenal,<br>
+tapi tempat paling tenang yang pernah aku temuin.
+</p>
+</div></div>
 
-      <div class="eyePatch left"><div class="eye"></div></div>
-      <div class="eyePatch right"><div class="eye"></div></div>
+<!-- 3 -->
+<div class="page"><div class="paper">
+<h2>hal kecil</h2>
+<p>
+aku suka semua hal kecil tentang kamu.<br><br>
+cara kamu ketawa, cara kamu cerita hal random,<br>
+bahkan cara kamu diam pun terasa nyaman buat aku.<br><br>
+hal-hal kecil itu justru yang bikin aku makin sadar,<br>
+kalau kamu itu berharga.
+</p>
+</div></div>
 
-      <div class="nose"></div>
-      <div class="mouth"></div>
-    </div>
+<!-- 4 -->
+<div class="page"><div class="paper">
+<h2>pesan 💌</h2>
+<p>
+kalau kamu lagi capee, gaa apa-apa istirahat.<br><br>
+kamu gaa harus selalu kuat setiap hari.<br>
+kamu gaa harus selalu terlihat baik-baik aja.<br><br>
+kalau dunia terlalu berat, pelan-pelan aja.<br>
+aku tetap di sini, gaaa kemanaa-manaa 🤍
+</p>
+</div></div>
 
-    <div class="body"></div>
-    <div class="arm left"></div>
-    <div class="arm right"></div>
-    <div class="leg left"></div>
-    <div class="leg right"></div>
+<!-- 5 GAME -->
+<div class="page"><div class="paper">
 
-    <div class="letter" onclick="openLetter()">💌 buka surat</div>
+<h2>terakhir 🌸</h2>
 
-  </div>
+<p>
+kalau kamu sampai sini, berarti kamu udah baca semuanya.<br><br>
+sekarang waktunya kecil-kecilan game ya 🤍
+</p>
+
+<p><b>klik tombol ini sampai 25 kali</b></p>
+
+<button class="heartBtn" onclick="addLove()">❤️ pencet aku</button>
+
+<div id="loveText">0 / 25</div>
+
+<button class="giftBtn" id="giftBtn" onclick="openGift()">🎁 buka hadiah</button>
+
+</div></div>
+
+<!-- 6 BUTTON KE BUKU.HTML -->
+<div class="page"><div class="paper">
+
+<h2>selesai 🎉</h2>
+<p>
+selamat, kamu udah baca semua slide dan main gamenya sampai 25x 🤍<br><br>
+kalau mau, klik tombol di bawah untuk lanjut ke selanjutnya, jangan cape ya xixixi 💋
+</p>
+
+<button class="slide6Btn" onclick="goBook()">bukaaaaaaa</button>
+
+</div></div>
+
 </div>
-
-<!-- PAPER -->
-<div class="paper" id="paper">
-
-  <div class="paperContent">
-
-    <div class="slides">
-
-      <!-- SLIDE 1 -->
-      <div class="slide">
-        <div class="card">
-          <h2>untuk dina 🌸</h2>
-          <p><span class="highlight">ga semua ruma berbentuk rumah</span></p>
-          <p>terima kasih udah hadir 🤍</p>
-        </div>
-      </div>
-
-      <!-- SLIDE 2 -->
-      <div class="slide">
-        <div class="card">
-          <h2>hal kecil</h2>
-          <p>aku suka cara kamu tersenyum 🌙</p>
-        </div>
-      </div>
-
-      <!-- SLIDE 3 -->
-      <div class="slide">
-        <div class="card">
-          <h2>pesan 💌</h2>
-          <p>kamu gak harus selalu kuat jangan egois ya kasian tubuh indahnya 🤍</p>
-        </div>
-      </div>
-
-      <!-- SLIDE 4 -->
-      <div class="slide">
-        <div class="card">
-
-          <h2>mini game 🎮</h2>
-
-          <p>pencet tombol hati ini sampai 25x 🤍</p>
-
-          <button class="heartBtn" onclick="addLove()">❤️ pencet aku</button>
-
-          <div id="loveText">kamu dicintai 0 kali</div>
-
-          <button class="giftBtn" id="giftBtn" onclick="openGift()">🎁 hadiah</button>
-
-        </div>
-      </div>
-
-      <!-- SLIDE 5 -->
-      <div class="slide">
-        <div class="card">
-          <h2>terakhir 🌸</h2>
-          <p>tenang ajaa dedee gaa kemanaa manaa okeeiii? kalo kitaa udaa ga bareng' nanti kakakk aku bacok 🤍</p>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
 </div>
 
 <!-- GIFT -->
 <div class="giftPage" id="giftPage">
-  <h1>scan yh 💖</h1>
-  <button onclick="closeGift()">kembali</button>
+<div class="giftCard">
+<h2>hadiah 💖</h2>
+<img src="bkt.jpg">
+<p>makasih udah sampai 25x 🤍</p>
+<button onclick="closeGift()">tutup</button>
 </div>
-
-<!-- LINK -->
-<div id="toBook">bacaa duluu baruu klik iniii terakhir okeiiii💖</div>
+</div>
 
 <script>
 
-for(let i=0;i<170;i++){
-  const star=document.createElement("div");
-  star.className="star";
-  star.style.left=Math.random()*100+"vw";
-  star.style.top=Math.random()*100+"vh";
-  star.style.animationDuration=(2+Math.random()*5)+"s";
-  document.querySelector(".stars").appendChild(star);
-}
-
-function openLetter(){
-  document.getElementById("paper").classList.add("show");
-}
-
+/* GAME */
 let love=0;
 
 function addLove(){
   love++;
+  document.getElementById("loveText").innerText = love + " / 25";
 
-  document.getElementById("loveText").innerHTML =
-  "kamu dicintai " + love + " kali ❤️";
-
-  if(love == 10){
-    document.getElementById("loveText").innerHTML =
-    "udah 10x 🤍 segini banyak sayang aku ke kamu";
-  }
-
-  if(love == 20){
-    document.getElementById("loveText").innerHTML =
-    "ih lucu banget kamu masih dipencet terus 🌸";
-  }
-
-  if(love == 25){
-    document.getElementById("loveText").innerHTML =
-    "yeay 25x 🎉 kamu udah buktiin semuanya, baca pesan terakhir dulu baru buka ini";
-    document.getElementById("giftBtn").style.display="block";
+  if(love==25){
+    document.getElementById("giftBtn").style.display="inline-block";
   }
 }
 
+/* GIFT */
 function openGift(){
   document.getElementById("giftPage").classList.add("show");
 }
@@ -482,12 +257,10 @@ function closeGift(){
   document.getElementById("giftPage").classList.remove("show");
 }
 
-document.getElementById("toBook").onclick=function(){
-  document.body.classList.add("fadeOut");
-  setTimeout(()=>{
-    window.location.href="buku.html";
-  },1000);
-};
+/* TOMBOL KE BUKU.HTML */
+function goBook(){
+  window.location.href = "buku.html";
+}
 
 </script>
 
