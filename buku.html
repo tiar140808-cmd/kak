@@ -3,257 +3,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Love Photo Scene 360°</title>
+<title>Happy Graduation Dina</title>
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <style>
 body {
   margin:0;
   padding:0;
-  font-family:Arial,sans-serif;
+  font-family: 'Dancing Script', cursive;
   background:#0b0b12;
   display:flex;
   justify-content:center;
   align-items:center;
+  flex-direction:column;
   height:100vh;
   overflow:hidden;
   color:white;
-}
-
-/* LOGIN CENTRAL */
-#login{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  width:320px;
-  background:rgba(255,255,255,.06);
-  backdrop-filter:blur(12px);
-  padding:25px;
-  border-radius:25px;
   text-align:center;
-  box-shadow:0 0 30px rgba(255,0,150,.15);
-  z-index:10;
 }
 
-#login h1{
-  font-size:28px;
-  margin-bottom:10px;
+#imageContainer {
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+#imageContainer img {
+  max-width:90%;
+  max-height:70vh;
+  border-radius:20px;
+  box-shadow:0 0 40px rgba(255,0,150,0.3);
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Floating effect for image */
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+#animatedText {
+  margin-top:20px;
+  font-size:2.5rem;
+  color:#ff9ae6;
+  min-height:3rem;
+  font-weight:bold;
+}
+
+/* Description */
+#description {
+  margin-top:10px;
+  font-size:1.8rem;
   color:#ff77dd;
 }
 
-#display{
-  width:100%;
-  height:60px;
-  background:#111;
-  border-radius:15px;
-  margin:20px 0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:28px;
-  letter-spacing:5px;
-  color:#ff9ae6;
-}
-
-.keypad{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
-
-.key{
-  height:60px;
-  border:none;
-  border-radius:18px;
-  background:#1b1b26;
-  color:white;
-  font-size:22px;
-  cursor:pointer;
-}
-
-#hint{
-  margin-top:18px;
-  font-size:14px;
-  color:#ff9ae6;
-  display:none;
-}
-
-/* LOVE SCENE */
-#scene{
-  display:none;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  width:100%;
-  max-width:800px;
-  height:500px;
-  perspective:1500px;
-}
-
-.pic{
-  position:absolute;
-  width:80px;
-  height:80px;
-  object-fit:cover;
-  border-radius:50%;
-  opacity:0;
-  transform-origin:center center;
-  cursor:grab;
-  transition: all 1s ease;
+/* Responsif */
+@media (max-width:600px){
+  #animatedText {
+    font-size:2rem;
+  }
+  #description {
+    font-size:1.3rem;
+  }
+  #imageContainer img {
+    max-height:50vh;
+  }
 }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login">
-<h1>🔒 Password</h1>
-<div id="display"></div>
-
-<div class="keypad">
-<button class="key" onclick="press(1)">1</button>
-<button class="key" onclick="press(2)">2</button>
-<button class="key" onclick="press(3)">3</button>
-<button class="key" onclick="press(4)">4</button>
-<button class="key" onclick="press(5)">5</button>
-<button class="key" onclick="press(6)">6</button>
-<button class="key" onclick="press(7)">7</button>
-<button class="key" onclick="press(8)">8</button>
-<button class="key" onclick="press(9)">9</button>
-<button class="key" onclick="del()">⌫</button>
-<button class="key" onclick="press(0)">0</button>
-<button class="key" onclick="check()">✔</button>
+<div id="imageContainer">
+  <img src="galaxy.jpg" alt="Galaxy">
+  <div id="animatedText"></div>
+  <div id="description">dibuat dengan cintaahh ❤️</div>
 </div>
-
-<div id="hint">coba pake tanggal kita kenal 🤍</div>
-</div>
-
-<!-- SCENE -->
-<div id="scene"></div>
 
 <script>
-let pass="";
-let attempt=0;
-const real="01032026";
+// Teks animasi muncul satu per satu
+const texts = [
+  "Happy Graduation Dinaaaa🌸",
+  "perjalananmu penuh warna dan cerita indah.",
+  "bangga dengan semua pencapaianmu!",
+  "semoga masa depanmu cerah seperti bintang-bintang. ✨",
+  "-DINAAAAPESEEEKKKKK💋"
+];
 
-function press(n){
-  if(pass.length>=8) return;
-  pass+=n;
-  document.getElementById("display").innerHTML = pass; // menampilkan angka asli
-}
-function del(){
-  pass=pass.slice(0,-1);
-  document.getElementById("display").innerHTML="•".repeat(pass.length);
-}
-function check(){
-  if(pass===real){
-    document.getElementById("login").style.display="none";
-    startLove();
+const animatedText = document.getElementById('animatedText');
+let textIndex = 0;
+let charIndex = 0;
+
+function typeNextChar(){
+  if(textIndex >= texts.length) return;
+  const currentText = texts[textIndex];
+  if(charIndex < currentText.length){
+    animatedText.textContent += currentText.charAt(charIndex);
+    charIndex++;
+    setTimeout(typeNextChar, 70); // kecepatan mengetik
   } else {
-    attempt++;
-    pass="";
-    document.getElementById("display").innerHTML="";
-    if(attempt>=2) document.getElementById("hint").style.display="block";
-    if(attempt>=3) document.getElementById("hint").innerHTML="aelah 😭 passwordnya 01032026";
-  }
-}
-
-/* LOVE 360° EFFECT */
-function startLove(){
-  const scene=document.getElementById("scene");
-  scene.style.display="block";
-
-  const images=["foto.jpg","foto2.jpg","foto3.jpg"];
-  const centerX = scene.offsetWidth/2;
-  const centerY = scene.offsetHeight/2;
-  const centerZ = 0;
-  const radius = 150;
-  let pics=[];
-
-  // buat array posisi random membentuk love
-  function lovePoint(t){
-    // parameter t dari 0-1
-    const angle = t*2*Math.PI;
-    const x = 16*Math.pow(Math.sin(angle),3);
-    const y = -(13*Math.cos(angle)-5*Math.cos(2*angle)-2*Math.cos(3*angle)-Math.cos(4*angle));
-    return {x:centerX + x*radius/16, y:centerY + y*radius/16, z:centerZ};
-  }
-
-  for(let i=0;i<120;i++){
-    const p=lovePoint(i/120);
-    const img=document.createElement("img");
-    img.src=images[i%images.length];
-    img.className="pic";
-    img.style.left=centerX+"px";
-    img.style.top=centerY+"px";
-    img.style.opacity=0;
-    scene.appendChild(img);
-    pics.push({el:img, x:p.x, y:p.y, z:p.z, rx:0, ry:0, scale:1});
-  }
-
-  // animasi masuk
-  pics.forEach((p,i)=>{
+    // setelah selesai satu teks, tunggu sebentar lalu lanjut ke teks berikutnya
     setTimeout(()=>{
-      p.el.style.left=p.x+"px";
-      p.el.style.top=p.y+"px";
-      p.el.style.opacity=1;
-    }, i*40);
-  });
-
-  // drag untuk rotate 360° & zoom
-  let isDragging=false, lastX, lastY;
-  let rotX=0, rotY=0;
-  let scaleV=1;
-
-  scene.onmousedown=scene.ontouchstart=(e)=>{
-    e.preventDefault();
-    isDragging=true;
-    const evt = e.touches? e.touches[0]:e;
-    lastX=evt.clientX;
-    lastY=evt.clientY;
-  };
-  scene.onmousemove=scene.ontouchmove=(e)=>{
-    if(!isDragging) return;
-    const evt = e.touches? e.touches[0]:e;
-    const dx=evt.clientX-lastX;
-    const dy=evt.clientY-lastY;
-    rotY+=dx*0.5;
-    rotX-=dy*0.5;
-    update3D();
-    lastX=evt.clientX;
-    lastY=evt.clientY;
-  };
-  scene.onmouseup=scene.ontouchend=()=>{isDragging=false;};
-
-  scene.onwheel=(e)=>{
-    e.preventDefault();
-    scaleV += e.deltaY* -0.001;
-    if(scaleV<0.2) scaleV=0.2;
-    if(scaleV>2) scaleV=2;
-    update3D();
-  };
-
-  function update3D(){
-    pics.forEach(p=>{
-      const cx = p.x - centerX;
-      const cz = p.z - centerZ;
-      const cosY=Math.cos(rotY*Math.PI/180);
-      const sinY=Math.sin(rotY*Math.PI/180);
-      const cosX=Math.cos(rotX*Math.PI/180);
-      const sinX=Math.sin(rotX*Math.PI/180);
-
-      let x1=cx*cosY - cz*sinY;
-      let z1=cx*sinY + cz*cosY;
-      let y1=p.y - centerY;
-      let y2=y1*cosX - z1*sinX;
-      let z2=y1*sinX + z1*cosX;
-
-      p.el.style.left=centerX + x1*scaleV - 40 +"px";
-      p.el.style.top=centerY + y2*scaleV - 40 +"px";
-      p.el.style.transform=scale(${scaleV});
-    });
+      animatedText.textContent = "";
+      charIndex = 0;
+      textIndex++;
+      typeNextChar();
+    }, 2000);
   }
 }
+
+// mulai animasi
+typeNextChar();
 </script>
 
 </body>
