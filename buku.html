@@ -139,7 +139,7 @@ const real="01032026";
 function press(n){
   if(pass.length>=8) return;
   pass+=n;
-  document.getElementById("display").innerHTML="•".repeat(pass.length);
+  document.getElementById("display").innerHTML = pass; // menampilkan angka asli
 }
 function del(){
   pass=pass.slice(0,-1);
