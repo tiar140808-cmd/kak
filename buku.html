@@ -206,7 +206,6 @@ function startLove(){
   const radius = 150;
   let pics=[];
 
-  // buat array posisi random membentuk love
   function lovePoint(t){
     const angle = t*2*Math.PI;
     const x = 16*Math.pow(Math.sin(angle),3);
@@ -226,7 +225,6 @@ function startLove(){
     pics.push({el:img, x:p.x, y:p.y, z:p.z, rx:0, ry:0, scale:1});
   }
 
-  // animasi masuk
   pics.forEach((p,i)=>{
     setTimeout(()=>{
       p.el.style.left=p.x+"px";
@@ -235,7 +233,7 @@ function startLove(){
     }, i*40);
   });
 
-  // drag untuk rotate 360° & zoom
+  // drag & zoom
   let isDragging=false, lastX, lastY;
   let rotX=0, rotY=0;
   let scaleV=1;
@@ -289,4 +287,9 @@ function startLove(){
     });
   }
 
-  // ---
+  // --- Teks Klik & Munculkan Foto ---
+  setTimeout(() => {
+    const clickText = document.getElementById("clickText");
+    clickText.style.display = "block";
+
+    clickText.onclick = () =>
