@@ -101,6 +101,34 @@ body {
   cursor:grab;
   transition: all 1s ease;
 }
+
+/* KLIK DAN FOTO */
+#clickText{
+  display:none;
+  position:absolute;
+  bottom:20px;
+  width:100%;
+  text-align:center;
+  color:#ff9ae6;
+  cursor:pointer;
+  font-size:18px;
+}
+
+#photoBox{
+  display:none;
+  width:300px;
+  height:300px;
+  margin:20px auto 0;
+  border:2px solid #ff77dd;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+#photoBox img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 </style>
 </head>
 <body>
@@ -130,6 +158,14 @@ body {
 
 <!-- SCENE -->
 <div id="scene"></div>
+
+<!-- TEKS KLIK -->
+<div id="clickText">Klik</div>
+
+<!-- KOTAK FOTO -->
+<div id="photoBox">
+  <img id="photo" src="galaxy.jpg" alt="Galaxy">
+</div>
 
 <script>
 let pass="";
@@ -172,7 +208,6 @@ function startLove(){
 
   // buat array posisi random membentuk love
   function lovePoint(t){
-    // parameter t dari 0-1
     const angle = t*2*Math.PI;
     const x = 16*Math.pow(Math.sin(angle),3);
     const y = -(13*Math.cos(angle)-5*Math.cos(2*angle)-2*Math.cos(3*angle)-Math.cos(4*angle));
@@ -253,8 +288,5 @@ function startLove(){
       p.el.style.transform=`scale(${scaleV})`;
     });
   }
-}
-</script>
 
-</body>
-</html>
+  // ---
