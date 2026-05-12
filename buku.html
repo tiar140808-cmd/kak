@@ -101,55 +101,6 @@ body {
   cursor:grab;
   transition: all 1s ease;
 }
-
-/* GALAXY MODAL */
-#galaxy-container{
-  display:none;
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background:rgba(0,0,0,0.8);
-  justify-content:center; align-items:center;
-  z-index:20;
-}
-
-#galaxy-container div{
-  position:relative;
-  background:#111;
-  padding:20px;
-  border-radius:20px;
-  text-align:center;
-}
-
-#galaxy-container img{
-  max-width:90vw;
-  max-height:80vh;
-  border-radius:15px;
-}
-
-#galaxy-container button{
-  margin-top:15px;
-  padding:8px 15px;
-  border:none;
-  border-radius:10px;
-  background:#ff77dd;
-  color:white;
-  cursor:pointer;
-}
-
-#showGalaxy{
-  position:absolute;
-  bottom:20px; left:50%;
-  transform:translateX(-50%);
-  padding:12px 25px;
-  border:none;
-  border-radius:20px;
-  background:#ff77dd;
-  color:white;
-  cursor:pointer;
-  z-index:15;
-  display:none;
-}
 </style>
 </head>
 <body>
@@ -179,15 +130,6 @@ body {
 
 <!-- SCENE -->
 <div id="scene"></div>
-
-<!-- BUTTON & MODAL -->
-<div id="galaxy-container">
-  <div>
-    <img src="galaxy.jpg" alt="Galaxy">
-    <button onclick="closeGalaxy()">Close</button>
-  </div>
-</div>
-<button id="showGalaxy">Show Galaxy</button>
 
 <script>
 let pass="";
@@ -230,6 +172,7 @@ function startLove(){
 
   // buat array posisi random membentuk love
   function lovePoint(t){
+    // parameter t dari 0-1
     const angle = t*2*Math.PI;
     const x = 16*Math.pow(Math.sin(angle),3);
     const y = -(13*Math.cos(angle)-5*Math.cos(2*angle)-2*Math.cos(3*angle)-Math.cos(4*angle));
@@ -297,4 +240,21 @@ function startLove(){
       const cosY=Math.cos(rotY*Math.PI/180);
       const sinY=Math.sin(rotY*Math.PI/180);
       const cosX=Math.cos(rotX*Math.PI/180);
-      const sinX=Math.sin(rotX*Math
+      const sinX=Math.sin(rotX*Math.PI/180);
+
+      let x1=cx*cosY - cz*sinY;
+      let z1=cx*sinY + cz*cosY;
+      let y1=p.y - centerY;
+      let y2=y1*cosX - z1*sinX;
+      let z2=y1*sinX + z1*cosX;
+
+      p.el.style.left=centerX + x1*scaleV - 40 +"px";
+      p.el.style.top=centerY + y2*scaleV - 40 +"px";
+      p.el.style.transform=scale(${scaleV});
+    });
+  }
+}
+</script>
+
+</body>
+</html>
