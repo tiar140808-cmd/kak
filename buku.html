@@ -68,6 +68,7 @@ body {
   color:white;
   font-size:22px;
   cursor:pointer;
+  user-select:none;
 }
 
 #hint{
@@ -102,7 +103,7 @@ body {
   transition: all 1s ease;
 }
 
-/* KLIK DAN FOTO */
+/* TEKS KLIK */
 #clickText{
   display:none;
   position:absolute;
@@ -114,6 +115,7 @@ body {
   font-size:18px;
 }
 
+/* KOTAK FOTO */
 #photoBox{
   display:none;
   width:300px;
@@ -138,19 +140,20 @@ body {
 <h1>🔒 Password</h1>
 <div id="display"></div>
 
+<!-- keypad bisa disentuh/klik -->
 <div class="keypad">
-<button class="key" onclick="press(1)">1</button>
-<button class="key" onclick="press(2)">2</button>
-<button class="key" onclick="press(3)">3</button>
-<button class="key" onclick="press(4)">4</button>
-<button class="key" onclick="press(5)">5</button>
-<button class="key" onclick="press(6)">6</button>
-<button class="key" onclick="press(7)">7</button>
-<button class="key" onclick="press(8)">8</button>
-<button class="key" onclick="press(9)">9</button>
-<button class="key" onclick="del()">⌫</button>
-<button class="key" onclick="press(0)">0</button>
-<button class="key" onclick="check()">✔</button>
+  <button class="key" onclick="press(1)">1</button>
+  <button class="key" onclick="press(2)">2</button>
+  <button class="key" onclick="press(3)">3</button>
+  <button class="key" onclick="press(4)">4</button>
+  <button class="key" onclick="press(5)">5</button>
+  <button class="key" onclick="press(6)">6</button>
+  <button class="key" onclick="press(7)">7</button>
+  <button class="key" onclick="press(8)">8</button>
+  <button class="key" onclick="press(9)">9</button>
+  <button class="key" onclick="del()">⌫</button>
+  <button class="key" onclick="press(0)">0</button>
+  <button class="key" onclick="check()">✔</button>
 </div>
 
 <div id="hint">coba pake tanggal kita kenal 🤍</div>
@@ -175,11 +178,11 @@ const real="01032026";
 function press(n){
   if(pass.length>=8) return;
   pass+=n;
-  document.getElementById("display").innerHTML="•".repeat(pass.length);
+  document.getElementById("display").textContent="•".repeat(pass.length);
 }
 function del(){
   pass=pass.slice(0,-1);
-  document.getElementById("display").innerHTML="•".repeat(pass.length);
+  document.getElementById("display").textContent="•".repeat(pass.length);
 }
 function check(){
   if(pass===real){
@@ -188,9 +191,9 @@ function check(){
   } else {
     attempt++;
     pass="";
-    document.getElementById("display").innerHTML="";
+    document.getElementById("display").textContent="";
     if(attempt>=2) document.getElementById("hint").style.display="block";
-    if(attempt>=3) document.getElementById("hint").innerHTML="aelah 😭 passwordnya 01032026";
+    if(attempt>=3) document.getElementById("hint").textContent="aelah 😭 passwordnya 01032026";
   }
 }
 
@@ -233,7 +236,6 @@ function startLove(){
     }, i*40);
   });
 
-  // drag & zoom
   let isDragging=false, lastX, lastY;
   let rotX=0, rotY=0;
   let scaleV=1;
@@ -283,13 +285,4 @@ function startLove(){
 
       p.el.style.left=centerX + x1*scaleV - 40 +"px";
       p.el.style.top=centerY + y2*scaleV - 40 +"px";
-      p.el.style.transform=`scale(${scaleV})`;
-    });
-  }
-
-  // --- Teks Klik & Munculkan Foto ---
-  setTimeout(() => {
-    const clickText = document.getElementById("clickText");
-    clickText.style.display = "block";
-
-    clickText.onclick = () =>
+      p.el.style.transform=`scale(${scaleV})
